@@ -1,80 +1,100 @@
 # Design System & Brief — Site CV / Génération de leads
-**Willie Leroux — Ingénieur d'affaires, flux documentaires**
-*Version validée : structure « Système de Design de l'État » (DSFR) + charte couleur DocOne.*
+**Willie Leroux — Ingénieur d'affaires · Spécialiste de l'éditique et de la communication multimodale**
+*Version 2 — direction « Éditorial » déployée (mise en page expressive sur socle DSFR + charte couleur DocOne).*
 
-> À déposer dans Claude Design. Tout le contenu est rédigé et prêt. Garde-fou juridique : on s'inspire des codes du DSFR (Marianne, structure institutionnelle) **sans** reproduire le bloc-marque « République Française » ni la Marianne tricolore, réservés aux sites de l'État.
+> Garde-fou juridique : on s'inspire des codes du DSFR (Marianne, structure institutionnelle) **sans** reproduire le bloc-marque « République Française » ni la Marianne tricolore, réservés aux sites de l'État.
+> Mention employeur : **DocOne** (gestion documentaire multicanale, Mérignac) est cité de façon **discrète** dans la légende du hero, le bloc contact et le pied de page — jamais en bloc-marque dominant.
 
 ---
 
 ## 1. Direction créative
-Registre **institutionnel et rassurant**, calé sur les codes de l'administration française, à la charte couleur DocOne (vert + gris). Objectif : crédibiliser auprès des DAF, DSI, DG, DGA et Secrétaires Généraux, notamment du secteur public. Structure carrée, rigoureuse, lisible ; couleur employée comme signal, pas en décor.
+Registre **institutionnel et rassurant** (codes de l'administration française, charte DocOne vert + gris) **enrichi d'une mise en page éditoriale** : typographie XXL, grille à filets fins, listes numérotées, chiffres géants animés, bandes images plein cadre et une vidéo d'ambiance. Objectif : crédibiliser auprès des DAF, DSI, DG, DGA et Secrétaires Généraux (cible PME / ETI privées et secteur public) tout en produisant un effet visuel marquant. La couleur reste un signal, pas un décor ; le vert électrique sert d'accent ponctuel.
 
 ---
 
-## 2. Tokens
+## 2. Tokens (`src/styles/tokens.css`)
 
 ### Couleurs
 | Token | Hex | Usage |
 |---|---|---|
-| `--vert` | `#00906C` | Couleur principale : boutons, bandes, liserés, stats |
+| `--vert` | `#00906C` | Couleur principale : boutons, accents, liserés, stats |
 | `--vert-h` | `#006E52` | Survol des éléments verts |
-| `--vert-a` | `#00543F` | État actif |
-| `--vert-elec` | `#00C896` | Accent lumineux ponctuel |
-| `--gris` | `#707070` | Second ton du logo, liseré, libellés |
+| `--vert-a` | `#00543F` | État actif ; fonds verts pleins (diagnostic, split) |
+| `--vert-elec` | `#00C896` | Accent lumineux ponctuel (marquee, liseré, surtitres sur fond sombre) |
+| `--gris` | `#707070` | Second ton du logo, libellés, numéros de section |
 | `--gris-fonce` | `#4A4A4A` | Badges de normes |
 | `--t1` | `#161616` | Titres |
 | `--t2` | `#3A3A3A` | Texte courant |
 | `--t-mention` | `#666666` | Mentions, légendes |
 | `--bg` | `#FFFFFF` | Fond |
 | `--alt` | `#F5F7F6` | Sections alternées, champs |
+| `--contrast` | `#ECEEED` | Fonds neutres (jauges, placeholders) |
 | `--callout` | `#EDF6F2` | Encarts (vert très clair) |
 | `--border` | `#DDDDDD` | Bordures |
+| `--border-vert` | `#BFE0D5` | Bordures vertes claires |
 
-Liseré de marque (header + footer) : bande verticale `linear-gradient(var(--vert) 0 50%, var(--gris) 50% 100%)`.
+- **Accent piloté** : sur la page d'accueil, `--accent` (défaut `var(--vert)`) centralise la couleur d'accent ; il suffit de le repointer vers `--vert-elec` pour basculer toute la page en accent électrique.
+- **Liseré de marque** (header + footer) : bande verticale `linear-gradient(var(--vert) 0 50%, var(--gris) 50% 100%)`.
 
 ### Typographie
-- **Marianne** (Regular 400 / Medium 500 / Bold 700) pour titres et texte. Chargée via CDN : `https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.13.0/dist/fonts/Marianne-*.woff2`. Repli : Arial, sans-serif.
-- Sur-titres (« overline ») en 0.875 rem, gras, vert, majuscules.
-- Échelle : H1 clamp(2rem,4.4vw,3rem) / titres de section clamp(1.6rem,3.2vw,2.25rem) / corps 1 rem / intro 1.1–1.25 rem.
+- **Marianne** (Regular 400 / Medium 500 / Bold 700), titres et texte. Chargée via CDN DSFR (`@gouvfr/dsfr@1.13.0`). Repli : Arial, sans-serif.
+- Sur-titres (« overline ») : 0.8–0.875 rem, gras, vert, majuscules, interlettrage `.12em`.
+- Échelle éditoriale :
+  - **H1 hero** `clamp(2.4rem, 6.6vw, 5.4rem)`, interligne ~.98, `letter-spacing -.03em`.
+  - **Titres de section** `clamp(1.9rem, 4.4vw, 3.3rem)`.
+  - **Chiffres géants (stats)** `clamp(2.6rem, 7vw, 5rem)`, vert.
+  - Corps 1 rem / intro 1.05–1.3 rem.
+- Un mot-clé du H1 est mis en accent vert (`<em>` sans italique).
 
 ### Formes & motion
-- **Coins carrés** (radius 0), bordures 1 px nettes, soulignements 2–4 px.
-- Transitions courtes (0.15 s). Apparition au scroll (fondu + translation 14 px). Compteurs animés une fois à l'entrée dans le viewport.
+- **Coins carrés** (radius 0), bordures 1 px nettes, soulignements 2–4 px, filets de séparation.
+- Transitions courtes (0.15–0.25 s). **Apparition au scroll** (`.reveal` → `.in`, fondu + translation) et **compteurs animés** une fois à l'entrée dans le viewport (`public/scripts/reveal.js`).
+- **Marquee** des normes (défilement horizontal continu sur bande sombre).
+- `prefers-reduced-motion` respecté (animations désactivées).
 
 ---
 
 ## 3. Composants
-- **Header** : liseré vert/gris + nom « Willie Leroux » / sous-titre « Flux documentaires », navigation ancrée, bouton vert « Réserver un échange ». Pas de bloc-marque officiel.
-- **Boutons** : carrés. Primaire vert plein ; secondaire contour vert ; flèche en suffixe.
-- **Tuiles d'expertise** : fond blanc, liseré bas vert 4 px, libellé de norme, titre, phrase.
-- **Bande Diagnostic** : pleine couleur verte, texte blanc, CTA blanc.
-- **Stats** : grand chiffre vert, filet haut vert 3 px, libellé.
-- **Cartes Références** : fond blanc bordé, étiquette secteur, liste à puces fléchées.
-- **Parcours** : encarts callout vert clair à barre latérale verte.
-- **Champs** : fond alt, soulignement bas, focus outline 2 px vert.
-- **Footer** : filet haut vert, liseré de marque, liens, mention.
+- **Header** (partagé, sticky) : liseré vert/gris, « Willie Leroux » + sous-titre « Spécialiste de l'éditique & de la communication multimodale » (masqué < 1100 px), navigation (Expertises, Secteurs, Cas, Veille), bouton vert « Réserver un échange », burger mobile.
+- **Boutons** : carrés. Primaire vert plein ; secondaire contour vert ; variante claire (`btn-light`) sur fond vert ; flèche en suffixe (`.arrow`).
+- **Marquee normes** : bande `--t1`, normes en blanc, sigle en `--vert-elec`, défilement continu.
+- **Expertises — liste numérotée** : filet haut, lignes `01…06`, libellé de norme, titre, phrase, flèche ; survol = liseré gauche vert + décalage. Données issues de la collection `expertises`.
+- **Bande image plein cadre** : photo + dégradé sombre + cartouche texte (surtitre vert électrique + titre blanc).
+- **Bande Diagnostic** : fond `--vert-a`, image de fond en faible opacité, chiffre fantôme « 30' », texte blanc, CTA clair.
+- **Stats** : grille à filets, grand chiffre vert animé + libellé.
+- **Cartes Références** : grille à filets, étiquette secteur, liste à puces fléchées.
+- **Split « Confiance numérique »** : 2 colonnes (texte + **vidéo d'ambiance** HD en boucle muette).
+- **Cartes Articles** : vignette (photo) + badge catégorie + titre + description + date + « Lire ». Données issues de la collection `veille`, vignette mappée par slug.
+- **Contact** : formulaire RGPD branché **Web3Forms** (composant `Contact.astro`), plus liens Rendez-vous / LinkedIn / e-mail / localisation.
+- **Footer** : filet haut vert, liseré de marque, sous-titre « éditique & communication multimodale », mention **« Au sein de DocOne · Mérignac (33) »**, colonnes de liens, mentions légales.
+- **Avatar de marque** (`public/img/avatar.svg`) : monogramme **WL** sur carte verte (dégradé, accent électrique, liseré, motif de lignes documentaires). **Désactivé pour l'instant** sur le hero (markup conservé en commentaire dans `index.astro`) ; réactivable à tout moment.
 - **Badges de normes** : NF 544 · NF 461 · NF K11-112 · ISO 9001 · ISO 27001 · HDS · eIDAS, en gris foncé.
 
 ---
 
-## 4. Architecture (une page, sections ancrées)
-1. Header · 2. Hero (accroche-question + photo + CTA) · 3. Bandeau normes · 4. Positionnement · 5. Expertises (6 tuiles) · 6. Diagnostic (bande verte) · 7. Résultats (stats + 6 références) · 8. Parcours · 9. Contact (formulaire + RDV + LinkedIn) · 10. Footer.
+## 4. Architecture (page d'accueil, sections ancrées)
+1. Header · 2. Hero (accroche-question + accent vert + CTA ; avatar optionnel) · 3. Marquee normes · 4. Positionnement · 5. Bande image « Le constat » · 6. Expertises (liste numérotée) · 7. Diagnostic (bande verte) · 8. Résultats (stats + 6 références) · 9. Split « Confiance numérique » + vidéo · 10. Articles (veille) · 11. Contact · 12. Footer.
+
+> La section « Parcours / Qui je suis » a été **retirée**.
 
 ---
 
-## 5. Contenu (prêt à intégrer)
+## 5. Contenu (en ligne)
 
 **Hero**
 - Sur-titre : `Flux documentaires · entrants & sortants`
-- Titre : Combien de jours entre l'arrivée d'un courrier et sa prise en compte réelle ?
+- Titre : Combien de jours entre l'arrivée d'un courrier et sa *prise en compte réelle* ?
 - Sous-titre : J'aide les directions d'ETI, de PME et d'organismes publics à industrialiser le traitement de leurs documents, du courrier entrant jusqu'à l'archivage à valeur probante.
-- CTA : Réserver 30 min -> https://calendly.com/willie-leroux38/30min · Voir mes expertises
-- Légende photo : Willie Leroux — Ingénieur d'affaires, Mérignac (33)
+- CTA : Réserver 30 min → https://calendly.com/willie-leroux38/30min · Voir mes expertises
+- Légende (avatar) : Willie Leroux — Ingénieur d'affaires · DocOne, Mérignac (33)
 
 **Positionnement** — Vos documents circulent encore trop lentement.
 J'interviens auprès des DAF, DSI, DG, DGA et Secrétaires Généraux d'organisations de 50 à 5 000 collaborateurs. Le point commun : un courrier entrant traité à la main, des délais qui s'allongent, des archives dont la valeur juridique n'est pas garantie. Mon rôle est de cartographier ces flux et de les remettre sous contrôle.
 
-**Expertises (6 tuiles)**
+**Bande « Le constat »** — Des kilomètres de documents, encore traités au rythme du papier.
+Un pli ouvert à la main, un dossier classé à la main : c'est du temps perdu, et une valeur juridique qui n'est plus garantie.
+
+**Expertises (6, depuis la collection)**
 | Norme | Titre | Phrase |
 |---|---|---|
 | BPO | Courrier entrant externalisé | Tri, numérisation, indexation et distribution numérique, de bout en bout. |
@@ -93,31 +113,38 @@ Sans démonstration produit, sans engagement. On regarde ensemble comment vos do
 - 30 000 plis postaux/an — acteur du financement
 - 6 normes & certifications mobilisées
 
-**Résultats — références (anonymisées)**
-- Banque — Un grand groupe bancaire : ~1 400 AR recommandés/jour ; copie fidèle NF 544 ; SAE NF 461.
-- Secteur public — Un établissement public financier : +2 000 courriers/jour (recommandés, sensibles, PND, TSA) ; traitement centralisé.
-- Assurance — Un assureur national : partenariat 15 ans ; ~300 AR recommandés/jour ; 650 Go en SAE.
-- Protection sociale — Groupes paritaires & mutuelles : plusieurs millions de plis/an ; réception, tri, indexation, classification.
-- Courtage — Un courtier en assurances (Est) : dématérialisation du courrier entrant ; 300 messages/jour ; back office libéré.
-- Collectivités — Secteur public local : copie fidèle NF 544 de dossiers sensibles ; courrier entrant d'une régie des eaux ; archivage à valeur probante pour un service public.
+**Résultats — références (anonymisées)** : Banque, Secteur public, Assurance, Protection sociale, Courtage, Collectivités (voir `index.astro` pour le détail des puces).
 
-**Parcours**
-- 2025 -> aujourd'hui · Mérignac — Ingénieur d'affaires, flux documentaires : BPO courrier, NF 544, NF 461, eIDAS, éditique, signature électronique.
-- 2023 -> 2024 · Nouméa — Responsable de compte GED / Reprographie : transition numérique d'acteurs publics et privés ; pilotage client en contexte de crise majeure.
+**Split « Confiance numérique »** — La valeur juridique ne se décrète pas. Elle se prouve.
+Copie fidèle NF 544, archivage NF 461, recommandé eIDAS : chaque maillon est tracé, horodaté et opposable. La chaîne de numérisation, de l'ouverture du pli à l'indexation, tient devant un juge. (Colonne droite : vidéo d'ambiance HD en boucle.)
+
+**Articles** — Veille & décryptages (6, depuis la collection `veille`).
+Normes, conformité, dématérialisation du courrier : de quoi situer votre maturité documentaire sans jargon.
 
 **Contact**
-- Formulaire : Nom · Organisation · Fonction · E-mail professionnel · Message.
+- Formulaire : Nom · Organisation · Fonction · E-mail professionnel · Message (Web3Forms).
 - Mention RGPD : données utilisées uniquement pour recontacter, jamais cédées.
-- Liens : RDV https://calendly.com/willie-leroux38/30min · LinkedIn https://www.linkedin.com/in/willie-leroux-docone/ · Mérignac, Nouvelle-Aquitaine.
+- Liens : RDV https://calendly.com/willie-leroux38/30min · LinkedIn https://www.linkedin.com/in/willie-leroux-docone/ · E-mail wleroux@docone.fr · Mérignac, Nouvelle-Aquitaine.
 
 ---
 
-## 6. À fournir pour finaliser
-- E-mail professionnel (sinon conversions = Calendly + LinkedIn).
-- Brancher le formulaire sur une messagerie/outil maîtrisé (ne pas envoyer vers un service tiers non contrôlé).
-- Remplacer les chiffres si tu disposes de résultats plus récents.
+## 6. Imagerie & médias
+- **Photos** libres de droit (Pexels), en **couleurs naturelles** (le lavis vert « duotone » a été retiré). Stockées dans `public/img/home/`.
+- **Vidéo d'ambiance** : `public/img/home/ambient.mp4` (720p, ~16 s, boucle muette) — effet Ken Burns généré localement à partir des photos libres, donc sans contrainte de licence.
+- **Avatar** : `public/img/avatar.svg` (monogramme de marque, désactivé pour l'instant).
+- **Portrait photo** : `public/img/willie.jpg` conservé comme image Open Graph (les SVG sont mal pris en charge en OG). Pour un vrai portrait éditorial dans le hero, déposer une photo HD et réactiver le bloc avatar/portrait.
 
 ---
 
-## 7. Instruction de lancement Claude Design
-> « Construis une landing page une-page à partir de ce design system et de ce contenu. Codes du Système de Design de l'État (police Marianne, structure carrée, composants institutionnels), couleur principale vert #00906C (charte DocOne), liseré vert/gris, sans bloc-marque officiel de l'État. Sections dans l'ordre du §4. Hero avec photo, tuiles d'expertise à liseré bas, bande Diagnostic verte pleine, stats animées, cartes de références anonymisées, parcours en encarts, formulaire de contact RGPD. Mobile d'abord, coins carrés, bordures fines. »
+## 7. À fournir / à finaliser
+- Photo de portrait HD si l'on veut afficher un visage (sinon avatar de marque ou hero sans média).
+- Vidéo HD « métier » de remplacement pour le split, si souhaité (le clip actuel est une ambiance générée).
+- Remplacer les chiffres des stats si des résultats plus récents sont disponibles.
+- E-mail pro déjà branché (`wleroux@docone.fr`) ; formulaire Web3Forms actif (clé en place dans `src/lib/url.js`).
+
+---
+
+## 8. Notes
+- Tous les textes rédigés pour le site sont passés au filtre « humanizer » (suppression des tournures typiques d'IA) ; la copie de marque validée a été préservée.
+- Marianne est chargée via le CDN DSFR (licence d'État). Pour un build « licence-clean », basculer le repli en Arial.
+- Une **galerie de 4 directions** (Éditorial, Flux, Immersif, Signal vert) reste disponible hors production sous `public/refonte/` (non déployée).
