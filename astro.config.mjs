@@ -1,15 +1,11 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// --- Config GitHub Pages -----------------------------------------------------
-// Project page : https://<user>.github.io/<repo>
-// Remplacer SITE_USER et REPO ci-dessous (ou via variables d'env au build).
-const SITE_USER = process.env.SITE_USER || 'salesdoc1wl';
-const REPO = process.env.REPO || 'site-willie';
-
+// --- Domaine personnalisé (GitHub Pages) -------------------------------------
+// Le site est servi à la racine de https://willie-leroux.fr
+// (fichier public/CNAME + DNS OVH : A -> GitHub Pages, www -> salesdoc1wl.github.io)
 export default defineConfig({
-  site: `https://${SITE_USER}.github.io`,
-  base: `/${REPO}`,
+  site: 'https://willie-leroux.fr',
   trailingSlash: 'ignore',
   integrations: [sitemap()],
   build: { format: 'directory' },

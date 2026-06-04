@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://salesdoc1wl.github.io/site-willie/sitemap-index.xml
+Sitemap: https://willie-leroux.fr/sitemap-index.xml
