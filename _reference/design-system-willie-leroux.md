@@ -147,4 +147,3 @@ Normes, conformité, dématérialisation du courrier : de quoi situer votre matu
 ## 8. Notes
 - Tous les textes rédigés pour le site sont passés au filtre « humanizer » (suppression des tournures typiques d'IA) ; la copie de marque validée a été préservée.
 - Marianne est chargée via le CDN DSFR (licence d'État). Pour un build « licence-clean », basculer le repli en Arial.
-- Une **galerie de 4 directions** (Éditorial, Flux, Immersif, Signal vert) reste disponible hors production sous `public/refonte/` (non déployée).
