@@ -33,7 +33,9 @@ const jsonld = {
   name: entry.data.titre,
   serviceType: entry.data.norme,
   description: entry.data.resume,
-  provider: { '@type': 'Person', name: 'Willie Leroux' },
+  url: Astro.url.href,
+  areaServed: { '@type': 'Country', name: 'France' },
+  provider: { '@type': 'Person', name: 'Willie Leroux', sameAs: ['https://www.linkedin.com/in/willie-leroux-docone/'] },
 };
 ---
 <BaseLayout title={entry.data.titre} description={entry.data.seoDescription ?? entry.data.resume} jsonld={jsonld}>

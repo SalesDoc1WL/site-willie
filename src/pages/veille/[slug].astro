@@ -25,9 +25,11 @@ const jsonld = {
   '@type': 'BlogPosting',
   headline: d.titre,
   description: d.description,
+  url: Astro.url.href,
+  mainEntityOfPage: Astro.url.href,
   datePublished: d.pubDate.toISOString(),
   ...(d.updatedDate ? { dateModified: d.updatedDate.toISOString() } : {}),
-  author: { '@type': 'Person', name: 'Willie Leroux' },
+  author: { '@type': 'Person', name: 'Willie Leroux', sameAs: ['https://www.linkedin.com/in/willie-leroux-docone/'] },
   keywords: d.tags.join(', '),
   articleSection: d.categorie,
 };

@@ -42,11 +42,14 @@ const refs = [
 const jsonld = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
+  '@id': new URL('#service', Astro.site).href,
   name: 'Willie Leroux — Flux documentaires',
   description: "Ingénieur d'affaires, spécialiste de l'éditique et de la communication multimodale : BPO courrier, numérisation NF 544, archivage NF 461, recommandé électronique eIDAS, GED, éditique.",
-  areaServed: 'France',
+  url: Astro.url.href,
+  email: 'wleroux@docone.fr',
+  areaServed: { '@type': 'Country', name: 'France' },
   address: { '@type': 'PostalAddress', addressLocality: 'Mérignac', addressRegion: 'Nouvelle-Aquitaine', addressCountry: 'FR' },
-  founder: { '@type': 'Person', name: 'Willie Leroux', jobTitle: "Ingénieur d'affaires" },
+  founder: { '@type': 'Person', name: 'Willie Leroux', jobTitle: "Ingénieur d'affaires", worksFor: { '@type': 'Organization', name: 'DocOne' }, sameAs: ['https://www.linkedin.com/in/willie-leroux-docone/'] },
   knowsAbout: ['BPO courrier entrant', 'Numérisation NF 544', 'Archivage électronique NF 461', 'Recommandé électronique eIDAS', 'GED', 'Éditique'],
 };
 ---
