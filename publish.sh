@@ -34,6 +34,17 @@ if [ "$ok" != 1 ]; then
   exit 1
 fi
 
+# 3bis. Vérification automatique (sources / dates / véracité / style)
+#       Bloque la publication si une ERREUR est détectée (lien mort, date
+#       absurde, catégorie invalide…). Les avertissements n'arrêtent pas.
+if command -v node >/dev/null 2>&1; then
+  echo "🔎 Vérification de l'article…"
+  node scripts/verify-articles.mjs "$SRC" \
+    || { echo "❌ vérification échouée : corrige les erreurs avant de publier."; exit 1; }
+else
+  echo "⚠️  node introuvable : vérification automatique ignorée."
+fi
+
 # 4. Publier (slug = nom de fichier sans extension)
 slug=$(basename "$SRC" .md)
 cp "$SRC" "$DEST/$slug.md"

@@ -1,0 +1,28 @@
+name: Vérification des articles
+
+# Garde-fou contenu : vérifie les articles de veille générés
+# (sources / dates / véracité / style) avant tout merge vers main.
+on:
+  pull_request:
+    paths:
+      - 'src/content/veille/**'
+      - 'scripts/verify-articles.mjs'
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/veille/**'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # Aucune dépendance : le vérificateur n'utilise que les modules natifs Node.
+      - name: Vérifier les articles
+        run: node scripts/verify-articles.mjs

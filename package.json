@@ -8,6 +8,7 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "verify": "node scripts/verify-articles.mjs",
     "astro": "astro"
   },
   "dependencies": {
