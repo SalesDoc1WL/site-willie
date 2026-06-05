@@ -1,0 +1,38 @@
+# Willie Leroux — Flux documentaires
+
+> Willie Leroux est ingénieur d'affaires en flux documentaires au sein de DocOne (Mérignac, Nouvelle-Aquitaine). Il aide les directions d'ETI, de PME et d'organismes publics (DAF, DSI, DG, DGA, secrétaires généraux) à industrialiser le traitement de leurs documents, du courrier entrant jusqu'à l'archivage à valeur probante. Point d'entrée : un diagnostic de maturité documentaire de 30 à 60 minutes, sans démonstration produit ni engagement.
+
+## Expertises
+
+- [Courrier entrant externalisé (BPO)](https://willie-leroux.fr/expertises/bpo-courrier-entrant): tri, numérisation, indexation et distribution numérique du courrier entrant, de bout en bout.
+- [Numérisation en copie fidèle (NF 544)](https://willie-leroux.fr/expertises/numerisation-nf544): copie numérique juridiquement opposable, permettant la destruction des originaux papier.
+- [Archivage électronique à valeur probante (SAE, NF 461)](https://willie-leroux.fr/expertises/archivage-electronique-nf461): intégrité, traçabilité et force probante sur toute la durée de conservation.
+- [Recommandé électronique (ERE / LRE, eIDAS)](https://willie-leroux.fr/expertises/recommande-electronique-eidas): envoi recommandé dématérialisé, conforme et opposable.
+- [GED — documents vivants](https://willie-leroux.fr/expertises/ged-documents-vivants): documents centralisés, accessibles et partagés au service des équipes.
+- [Éditique & confiance numérique](https://willie-leroux.fr/expertises/editique-confiance): marketing direct, signature électronique, identification client, cachet 2D-Doc.
+
+## Secteurs
+
+- [Banque](https://willie-leroux.fr/secteurs/banque)
+- [Secteur public](https://willie-leroux.fr/secteurs/secteur-public)
+- [Assurance](https://willie-leroux.fr/secteurs/assurance)
+- [Protection sociale](https://willie-leroux.fr/secteurs/protection-sociale)
+- [Courtage](https://willie-leroux.fr/secteurs/courtage)
+- [Collectivités](https://willie-leroux.fr/secteurs/collectivites)
+
+## Veille
+
+- [Externaliser le courrier entrant : ce qui part, ce qui reste en interne](https://willie-leroux.fr/veille/externaliser-courrier-entrant-entreprise): ce que l'on garde en interne et ce que l'on confie quand on externalise le courrier entrant.
+- [Dématérialiser le courrier d'une collectivité : par où commencer](https://willie-leroux.fr/veille/dematerialiser-courrier-collectivite): réussir la dématérialisation du courrier entrant dans le secteur public local en quatre étapes.
+- [ERE / LRE : le recommandé électronique en pratique](https://willie-leroux.fr/veille/ere-lre-recommande-electronique): déployer le recommandé électronique à grande échelle.
+- [GED ou SAE : quelle différence, et pourquoi les deux](https://willie-leroux.fr/veille/ged-vs-sae): documents vivants contre valeur probante dans la durée.
+- [NF 544 : ce que « copie fidèle » veut vraiment dire](https://willie-leroux.fr/veille/nf544-copie-fidele): conditions et conséquences juridiques de la destruction des originaux papier.
+- [Combien de temps conserver vos documents ? Le rôle du SAE](https://willie-leroux.fr/veille/nf461-durees-conservation): durées légales de conservation et archivage NF 461.
+- [Courrier entrant traité à la main : 5 coûts cachés](https://willie-leroux.fr/veille/bpo-courrier-cout-cache): les coûts invisibles du traitement manuel du courrier.
+- [Signature électronique : 3 niveaux eIDAS, lequel choisir](https://willie-leroux.fr/veille/signature-electronique-niveaux-eidas): les trois niveaux de signature eIDAS et comment choisir le bon par type de document.
+
+## Contact
+
+- [Réserver un diagnostic de 30 minutes](https://calendly.com/willie-leroux38/30min)
+- [LinkedIn](https://www.linkedin.com/in/willie-leroux-docone/)
+- E-mail : wleroux@docone.fr

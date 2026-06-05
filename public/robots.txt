@@ -1,4 +1,44 @@
+# robots.txt — willie-leroux.fr
+# Objectif : tout autoriser (site vitrine), guider vers le sitemap,
+# et autoriser explicitement les crawlers IA pour permettre les citations.
+
+# --- Moteurs de recherche + tout robot par défaut ---
 User-agent: *
 Allow: /
 
+# --- Crawlers IA (laisser en Allow pour être cité par les assistants) ---
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Google (entraînement + Gemini / AI Overviews)
+User-agent: Google-Extended
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl (alimente de nombreux modèles)
+User-agent: CCBot
+Allow: /
+
+# --- Sitemap ---
 Sitemap: https://willie-leroux.fr/sitemap-index.xml
