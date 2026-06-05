@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import DiagnosticCTA from '../components/DiagnosticCTA.astro';
+import { LINKEDIN, CALENDLY } from '../lib/url.js';
+
+const EMAIL = 'wleroux@docone.fr';
+
+// Person — entité auteur (E-E-A-T). @id et sameAs pointent vers cette page.
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': new URL('/a-propos#willie', Astro.site).href,
+  name: 'Willie Leroux',
+  jobTitle: "Ingénieur d'affaires — flux documentaires",
+  worksFor: { '@type': 'Organization', name: 'DocOne' },
+  url: Astro.url.href,
+  email: EMAIL,
+  address: { '@type': 'PostalAddress', addressLocality: 'Mérignac', addressRegion: 'Nouvelle-Aquitaine', addressCountry: 'FR' },
+  knowsAbout: ['BPO courrier entrant', 'Numérisation NF 544', 'Archivage électronique NF 461', 'Recommandé électronique eIDAS', 'GED', 'Éditique'],
+  sameAs: [LINKEDIN],
+};
+---
+<BaseLayout
+  title="Willie Leroux, ingénieur d'affaires en flux documentaires"
+  description="Willie Leroux accompagne les directions d'ETI, de PME et d'organismes publics sur leurs flux documentaires : courrier entrant, numérisation, archivage à valeur probante."
+  jsonld={jsonld}
+>
+  <Breadcrumb items={[{ label: 'À propos' }]} />
+  <header class="page-head">
+    <div class="wrap">
+      <span class="overline">À propos</span>
+      <h1>Willie Leroux</h1>
+    </div>
+  </header>
+
+  <section class="reveal">
+    <div class="wrap">
+      <article class="prose">
+        <p>Je suis ingénieur d'affaires en flux documentaires, au sein de DocOne, basé à Mérignac en Nouvelle-Aquitaine.</p>
+
+        <p>Mon métier tient en une phrase : aider les organisations à reprendre le contrôle de leurs documents, du courrier qui arrive le matin jusqu'aux archives qu'il faudra produire devant un juge dix ans plus tard.</p>
+
+        <h2>Mon parcours</h2>
+        <p>[À compléter : nombre d'années dans le domaine, étapes principales du parcours, types de structures accompagnées. Trame à remplir avec des faits réels : « Depuis [X] ans, j'interviens sur le traitement documentaire de grandes organisations. J'ai d'abord [première étape], avant de me concentrer sur [spécialité actuelle]. »]</p>
+        <p>[Si tu as une formation ou une certification pertinente, indique-la ici : elle compte pour la crédibilité.]</p>
+
+        <h2>Avec qui je travaille</h2>
+        <p>J'interviens auprès des DAF, DSI, DG, DGA et secrétaires généraux d'organisations de 50 à 5 000 collaborateurs, dans le privé comme dans le public. Banque, assurance, protection sociale, courtage, collectivités : le contexte change, le problème de fond se ressemble. Des documents qui circulent trop lentement, et une valeur juridique qui n'est pas toujours garantie.</p>
+        <p>Quelques ordres de grandeur sur lesquels j'ai travaillé, côté volumes traités : un assureur national avec qui le partenariat dure depuis quinze ans, un établissement public financier qui centralise plus de 2 000 courriers par jour, des groupes paritaires qui reçoivent plusieurs millions de plis par an. [Ajuste cette liste à ce que tu peux réellement revendiquer.]</p>
+
+        <h2>Ma façon de travailler</h2>
+        <p>Je ne commence jamais par un outil. Je commence par regarder comment les documents entrent, circulent et sont conservés dans votre organisation, et où se trouvent les points de friction. C'est l'objet du <a href={CALENDLY} target="_blank" rel="noopener">diagnostic de maturité documentaire</a> : 30 à 60 minutes, sans démonstration produit ni engagement, pour repartir avec une vision claire et des premières pistes.</p>
+        <p>Le reste vient ensuite, et seulement si c'est utile : <a href="/expertises/numerisation-nf544">numérisation en copie fidèle</a>, <a href="/expertises/archivage-electronique-nf461">archivage à valeur probante</a>, <a href="/expertises/recommande-electronique-eidas">recommandé électronique</a>, <a href="/expertises/bpo-courrier-entrant">externalisation du courrier entrant</a>.</p>
+
+        <h2>Me contacter</h2>
+        <p><a href={LINKEDIN} target="_blank" rel="noopener">LinkedIn</a> · <a href={`mailto:${EMAIL}`}>{EMAIL}</a> · <a href={CALENDLY} target="_blank" rel="noopener">Réserver 30 minutes</a></p>
+      </article>
+    </div>
+  </section>
+
+  <DiagnosticCTA />
+</BaseLayout>
