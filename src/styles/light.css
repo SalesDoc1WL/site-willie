@@ -1,0 +1,114 @@
+/* =====================================================================
+   Variante CLAIRE — couche de thème (body.theme-light).
+   Bascule en clair : header, hero, « 11 jours », chapitre entrant,
+   expertises, hinge. Garde un socle sombre : contact + footer.
+   Charge APRÈS site.css et journey.css.
+   ===================================================================== */
+
+.theme-light { background: var(--bg); }
+
+/* ---------- boutons adaptés au clair ---------- */
+.theme-light .btn--elec { background: var(--vert); color: #fff; border-color: var(--vert); }
+.theme-light .btn--elec:hover { background: var(--vert-h); border-color: var(--vert-h); }
+.theme-light .hero .btn--ghost-dark { background: transparent; color: var(--vert); border-color: var(--vert); }
+.theme-light .hero .btn--ghost-dark:hover { background: var(--callout); color: var(--vert-h); border-color: var(--vert-h); }
+
+/* ---------- header ---------- */
+.theme-light .hdr { background: rgba(255,255,255,.88); border-bottom-color: var(--border); }
+.theme-light .hdr__brand { color: var(--t1); }
+.theme-light .hdr__brand small { color: var(--vert); }
+.theme-light .hdr__nav a { color: var(--t2); }
+.theme-light .hdr__nav a:hover { color: var(--vert); }
+.theme-light .hdr__burger { border-color: var(--border); color: var(--t1); }
+.theme-light .hdr__burger span { background: var(--t1); }
+@media (max-width: 940px) {
+  .theme-light .hdr__nav.open { background: #fff; border-bottom-color: var(--border); }
+  .theme-light .hdr__nav.open a { border-top-color: var(--border); }
+}
+.theme-light .liseret { background: linear-gradient(var(--vert) 0 50%, var(--gris) 50% 100%); }
+
+/* ---------- hero ---------- */
+.theme-light .hero { background: var(--bg); color: var(--t2); }
+.theme-light .hero::after { background: radial-gradient(closest-side, rgba(0,144,108,.08), transparent 70%); }
+.theme-light .hero h1 { color: var(--t1); }
+.theme-light .hero h1 em { color: var(--vert); }
+.theme-light .hero__lead { color: var(--t2); }
+.theme-light .hero .overline--elec { color: var(--vert); }
+.theme-light .hero__figures { background: var(--border); border-color: var(--border); }
+.theme-light .fig { background: var(--bg); }
+.theme-light .fig__n { color: var(--vert); text-shadow: none; }
+.theme-light .fig__n i { color: var(--t2); }
+.theme-light .fig__l { color: var(--t2); }
+
+/* ---------- chiffre obsédant ---------- */
+.theme-light .obsess { background: var(--alt); color: var(--t2); border-top-color: var(--border); }
+.theme-light .obsess__ghost { color: rgba(22,22,22,.05); }
+.theme-light .obsess__big .count { color: var(--t1); }
+.theme-light .obsess__big i { color: var(--vert); }
+.theme-light .obsess__lab { color: var(--t2); }
+.theme-light .obsess__text h2 { color: var(--t1); }
+.theme-light .obsess__text h2 em { color: var(--vert); }
+.theme-light .obsess__text p { color: var(--t2); }
+.theme-light .obsess__goal { border-top-color: var(--border); }
+.theme-light .obsess__goal .count { color: var(--vert); }
+.theme-light .obsess__goal span { color: var(--t2); }
+
+/* ---------- chapitre ENTRANT : repasse en thème clair (vars --j-*) ---------- */
+.theme-light .jintro, .theme-light .journey {
+  --j-bg: var(--alt);
+  --j-ink: var(--t1);
+  --j-soft: var(--t2);
+  --j-faint: var(--t-mention);
+  --j-accent: var(--vert);
+  --j-glow: rgba(0,144,108,.10);
+  --j-ghost: rgba(22,22,22,.045);
+  --j-track: var(--border);
+  --j-fillglow: 0 0 10px rgba(0,144,108,.4);
+  --j-dotbg: #fff;
+  --j-dotborder: var(--border);
+  --j-dotglow: 0 0 8px rgba(0,144,108,.5);
+  --j-chip-bg: #fff;
+  --j-chip-border: var(--border);
+  --j-chip-ink: var(--gris-fonce);
+  --j-sheet: #fff;
+  --j-sheet-bar: #dbe3df;
+  --j-sheet-shadow: 0 24px 54px rgba(8,20,16,.14);
+}
+.theme-light .journey .sheet { border: 1px solid var(--border); }
+/* la scène « archivage » garde un bouclier sombre lisible sur feuille blanche */
+
+/* ---------- hinge (transition) en clair ---------- */
+.theme-light .hinge { background: var(--alt); }
+.theme-light .hinge__line { background: linear-gradient(rgba(0,144,108,0), var(--vert)); }
+.theme-light .hinge__txt { color: var(--t2); }
+.theme-light .hinge__txt em { color: var(--t1); }
+.theme-light .hinge__arrow { color: var(--vert); }
+
+/* ---------- expertises ---------- */
+.theme-light .exp { background: var(--bg); color: var(--t2); }
+.theme-light .exp .eyebrow--elec { color: var(--vert); }
+.theme-light .exp .eyebrow--elec .no { color: var(--t1); }
+.theme-light .exp .eyebrow--elec::after { background: var(--border); }
+.theme-light .exp__list { border-top-color: var(--border); }
+.theme-light .exp__row { border-bottom-color: var(--border); }
+.theme-light .exp__no { color: var(--t-mention); }
+.theme-light .exp__norme { color: var(--vert); }
+.theme-light .exp__t { color: var(--t1); }
+.theme-light .exp__d { color: var(--t2); }
+.theme-light .exp__arr { color: var(--vert); }
+.theme-light .exp__row:hover { background: var(--alt); }
+.theme-light .exp__row:hover .exp__no { color: var(--vert); }
+
+/* ---------- mini-nav : socle clair lisible ---------- */
+.theme-light .snav__lab { background: rgba(10,19,16,.9); color: #fff; }
+
+/* ---------- footer en clair ---------- */
+.theme-light .foot { background: var(--alt); color: var(--t2); border-top-color: var(--vert); }
+.theme-light .foot__in { border-bottom-color: var(--border); }
+.theme-light .foot__brand { color: var(--t1); }
+.theme-light .foot__about { color: var(--t2); }
+.theme-light .foot__col h4 { color: var(--vert); }
+.theme-light .foot__col a { color: var(--t2); }
+.theme-light .foot__col a:hover { color: var(--vert); }
+.theme-light .foot__bottom { color: var(--t-mention); }
+.theme-light .foot__bottom .normes span { color: var(--t-mention); border-color: var(--border); }

@@ -1,25 +1,21 @@
 ---
-import { CALENDLY } from '../lib/url.js';
+import { url, CALENDLY } from '../lib/url.js';
 const {
   id = undefined,
   titre = "Un échange de 30 à 60 minutes pour cartographier vos flux.",
   texte = "Sans démonstration produit, sans engagement. On regarde ensemble comment vos documents entrent, circulent et sont conservés, et où se trouvent les points de friction. Vous repartez avec une vision claire de votre maturité documentaire et des premières pistes.",
-  aside = true,
 } = Astro.props;
+const home = (hash) => `${url('/')}${hash}`.replace('//', '/');
 ---
-<section class="diag reveal" id={id}>
-  <div class="wrap diag-in">
-    <div>
-      <span class="overline">Diagnostic de maturité documentaire</span>
-      <h2>{titre}</h2>
-      <p>{texte}</p>
-      <a class="btn arrow" href={CALENDLY} target="_blank" rel="noopener">Réserver mon créneau</a>
+<section class="diag" id={id}>
+  <span class="diag__ghost" aria-hidden="true">30'</span>
+  <div class="wrap diag__in">
+    <span class="overline reveal">Diagnostic de maturité documentaire</span>
+    <h2 class="reveal">{titre}</h2>
+    <p class="reveal">{texte}</p>
+    <div class="diag__cta reveal">
+      <a class="btn btn--light" href={CALENDLY} target="_blank" rel="noopener">Réserver mon créneau <span class="arr">→</span></a>
+      <a class="btn btn--ghost-dark" href={home('#contact')} style="border-color: rgba(255,255,255,.6)">Me décrire mon besoin</a>
     </div>
-    {aside && (
-      <div class="diag-aside">
-        <b>30–60</b>
-        minutes, à distance
-      </div>
-    )}
   </div>
 </section>

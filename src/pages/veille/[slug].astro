@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumb from '../../components/Breadcrumb.astro';
 import DiagnosticCTA from '../../components/DiagnosticCTA.astro';
 import { url } from '../../lib/url.js';
 
@@ -13,64 +12,90 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 const d = entry.data;
-const fmtDate = (x) => x.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+const fmtLong = (x) => x.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long' });
+
+const ART_THUMB = {
+  'bpo-courrier-cout-cache': 'art-bpo.jpg',
+  'nf544-copie-fidele': 'art-nf544.jpg',
+  'ged-vs-sae': 'art-gedsae.jpg',
+  'nf461-durees-conservation': 'art-nf461.jpg',
+  'ere-lre-recommande-electronique': 'art-ere.jpg',
+  'dematerialiser-courrier-collectivite': 'art-collectivite.jpg',
+};
+const cover = d.cover || `/img/home/${ART_THUMB[entry.slug] || 'numerisation.jpg'}`;
 
 const related = (await getCollection('veille', ({ data }) => !data.draft))
   .filter((a) => a.slug !== entry.slug && a.data.categorie === d.categorie)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
 
-const jsonld = {
-  '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
-  headline: d.titre,
-  description: d.description,
-  url: Astro.url.href,
-  mainEntityOfPage: Astro.url.href,
-  datePublished: d.pubDate.toISOString(),
-  ...(d.updatedDate ? { dateModified: d.updatedDate.toISOString() } : {}),
-  author: { '@type': 'Person', name: 'Willie Leroux', sameAs: ['https://www.linkedin.com/in/willie-leroux-docone/'] },
-  keywords: d.tags.join(', '),
-  articleSection: d.categorie,
-};
+const jsonld = [
+  {
+    '@context': 'https://schema.org', '@type': 'BlogPosting',
+    headline: d.titre, description: d.description, url: Astro.url.href, mainEntityOfPage: Astro.url.href,
+    datePublished: d.pubDate.toISOString(),
+    ...(d.updatedDate ? { dateModified: d.updatedDate.toISOString() } : {}),
+    author: { '@type': 'Person', name: 'Willie Leroux', sameAs: ['https://www.linkedin.com/in/willie-leroux-docone/'] },
+    keywords: d.tags.join(', '), articleSection: d.categorie,
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: new URL(url('/'), Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Veille', item: new URL(url('/veille'), Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: d.titre },
+    ],
+  },
+];
 ---
-<BaseLayout title={d.titre} description={d.description} type="article" jsonld={jsonld}>
-  <Breadcrumb items={[{ label: 'Veille', href: '/veille' }, { label: d.titre }]} />
-  <header class="page-head">
-    <div class="wrap">
-      <span class="cat-badge">{d.categorie}</span>
-      <h1>{d.titre}</h1>
-      <p class="post-meta" style="margin-top:14px;">
-        <time datetime={d.pubDate.toISOString()}>Publié le {fmtDate(d.pubDate)}</time>
-        {d.updatedDate && <span>· Mis à jour le {fmtDate(d.updatedDate)}</span>}
-      </p>
-    </div>
-  </header>
-
-  <section class="reveal">
-    <div class="wrap">
-      <article class="prose"><Content /></article>
-      {d.tags.length > 0 && (
-        <div class="filter-group" style="margin-top:32px;">
-          <span class="gl">Tags</span>
-          {d.tags.map((t) => <span class="chip" style="cursor:default;">{t}</span>)}
+<BaseLayout title={d.titre} description={d.description} type="article" jsonld={jsonld} readingBar>
+  <article>
+    <section class="ihero">
+      <div class="wrap ihero__in">
+        <nav class="crumb" aria-label="Fil d'ariane">
+          <a href={url('/')}>Accueil</a><span class="sep">/</span>
+          <a href={url('/veille')}>Veille</a><span class="sep">/</span>
+          <span class="cur">{d.titre}</span>
+        </nav>
+        <div class="ihero__kicker">
+          <span class="chip">{d.categorie}</span>
+          <span class="overline">Veille</span>
         </div>
-      )}
-    </div>
-  </section>
+        <h1>{d.titre}</h1>
+        <p class="ihero__lead">{d.description}</p>
+        <div class="ihero__meta">
+          <div><span class="k">Publié</span><span class="v"><time datetime={d.pubDate.toISOString()}>{fmtLong(d.pubDate)}</time></span></div>
+          {d.updatedDate && <div><span class="k">Mis à jour</span><span class="v">{fmtLong(d.updatedDate)}</span></div>}
+          <div><span class="k">Par</span><span class="v">Willie Leroux</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ilead"><img src={url(cover)} alt="" /></div>
+
+    <section class="ibody">
+      <div class="wrap">
+        <article class="prose"><Content /></article>
+        {d.tags.length > 0 && (
+          <div class="chips" style="max-width:730px;margin:2em auto 0;">
+            {d.tags.map((t) => <span class="chip">{t}</span>)}
+          </div>
+        )}
+      </div>
+    </section>
+  </article>
 
   {related.length > 0 && (
-    <section class="reveal">
+    <section class="related">
       <div class="wrap">
-        <span class="overline">Veille</span>
-        <h2 class="sec-title">À lire ensuite.</h2>
-        <div class="refs">
+        <div class="eyebrow"><span class="no">→</span> À lire aussi</div>
+        <div class="related__grid">
           {related.map((a) => (
-            <a class="ref" href={url(`/veille/${a.slug}`)}>
-              <span class="cat-badge">{a.data.categorie}</span>
-              <h3>{a.data.titre}</h3>
-              <p>{a.data.description}</p>
-              <span class="more arrow">Lire </span>
+            <a class="rcard" href={url(`/veille/${a.slug}`)}>
+              <span class="k">{a.data.categorie}</span>
+              <b>{a.data.titre}</b>
+              <span class="d">{a.data.description}</span>
+              <span class="more">Lire <span class="arr">→</span></span>
             </a>
           ))}
         </div>
@@ -78,5 +103,5 @@ const jsonld = {
     </section>
   )}
 
-  <DiagnosticCTA />
+  <DiagnosticCTA titre="Une question sur ce sujet ? Parlons-en." texte="Trente minutes, sans démonstration produit ni engagement, pour situer votre maturité documentaire et voir où agir en priorité." />
 </BaseLayout>

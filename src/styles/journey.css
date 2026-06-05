@@ -1,0 +1,198 @@
+/* =====================================================================
+   « Le voyage du document » — séquences épinglées (entrant + sortant).
+   Thème pilotable par variables : .journey (sombre) / .journey--light (clair).
+   ===================================================================== */
+
+/* ---- thème SOMBRE (défaut) ---- */
+.jintro, .journey {
+  --j-bg: #06100c;
+  --j-ink: #fff;
+  --j-soft: rgba(232,239,235,.78);
+  --j-faint: rgba(232,239,235,.5);
+  --j-accent: var(--vert-elec);
+  --j-glow: rgba(0,200,150,.16);
+  --j-ghost: rgba(255,255,255,.035);
+  --j-track: rgba(255,255,255,.14);
+  --j-fillglow: 0 0 14px rgba(0,200,150,.6);
+  --j-dotbg: #0a1310;
+  --j-dotborder: rgba(255,255,255,.3);
+  --j-dotglow: 0 0 10px rgba(0,200,150,.7);
+  --j-chip-bg: transparent;
+  --j-chip-border: rgba(255,255,255,.24);
+  --j-chip-ink: var(--vert-elec);
+  --j-sheet: #f4f7f5;
+  --j-sheet-bar: #d4ddd8;
+  --j-sheet-shadow: 0 30px 70px rgba(0,0,0,.5);
+}
+/* ---- thème CLAIR (chapitre sortant) ---- */
+.jintro--light, .journey--light {
+  --j-bg: var(--alt);
+  --j-ink: var(--t1);
+  --j-soft: var(--t2);
+  --j-faint: var(--t-mention);
+  --j-accent: var(--vert);
+  --j-glow: rgba(0,144,108,.10);
+  --j-ghost: rgba(22,22,22,.045);
+  --j-track: var(--border);
+  --j-fillglow: 0 0 10px rgba(0,144,108,.4);
+  --j-dotbg: #fff;
+  --j-dotborder: var(--border);
+  --j-dotglow: 0 0 8px rgba(0,144,108,.5);
+  --j-chip-bg: #fff;
+  --j-chip-border: var(--border);
+  --j-chip-ink: var(--gris-fonce);
+  --j-sheet: #fff;
+  --j-sheet-bar: #dbe3df;
+  --j-sheet-shadow: 0 24px 54px rgba(8,20,16,.14);
+}
+
+/* ---- intro courte (avant l'épinglage) ---- */
+.jintro { background: var(--j-bg); color: var(--j-soft); padding: clamp(64px, 9vw, 120px) 0 clamp(20px, 4vw, 48px); }
+.jintro h2 { font-size: clamp(2.2rem, 4.4vw, 3.6rem); font-weight: 700; color: var(--j-ink); line-height: 1.02; letter-spacing: -.03em; margin: 18px 0 18px; text-wrap: balance; max-width: 20ch; }
+.jintro h2 em { color: var(--j-accent); }
+.jintro__lead { font-size: clamp(1.05rem, 1.4vw, 1.22rem); color: var(--j-soft); line-height: 1.55; max-width: 56ch; }
+.jintro .overline { color: var(--j-accent); }
+
+/* ---- section haute + étape épinglée ---- */
+.journey { position: relative; height: 420vh; background: var(--j-bg); }
+.journey__sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; --p: 0; }
+.journey__sticky::before { content: ""; position: absolute; width: 80vmax; height: 80vmax; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, var(--j-glow), transparent 70%);
+  top: 50%; left: calc(8% + var(--p) * 78%); transform: translate(-50%, -50%); }
+.journey__grid { position: relative; z-index: 2; height: 100%;
+  display: grid; grid-template-columns: 1.02fr 1fr; align-items: center; gap: clamp(30px, 5vw, 80px); }
+
+.jindex { position: absolute; right: 2%; top: 50%; transform: translateY(-50%); z-index: 1;
+  font-size: clamp(20rem, 46vh, 40rem); font-weight: 700; line-height: .7; letter-spacing: -.05em;
+  color: var(--j-ghost); font-variant-numeric: tabular-nums; pointer-events: none; }
+
+/* étapes (cross-fade) */
+.jpanel { position: relative; }
+.jpanel__steps { position: relative; height: 210px; margin-bottom: 30px; }
+.jstep { position: absolute; inset: 0; opacity: 0; transform: translateY(14px); transition: opacity .55s var(--ease), transform .55s var(--ease); pointer-events: none; }
+.jstep__no { font-size: .8rem; font-weight: 700; letter-spacing: .16em; color: var(--j-accent); font-variant-numeric: tabular-nums; }
+.jstep__t { font-size: clamp(2.1rem, 4.4vw, 3.6rem); font-weight: 700; color: var(--j-ink); line-height: 1; letter-spacing: -.03em; margin: 12px 0 14px; }
+.jstep__d { font-size: 1.06rem; color: var(--j-soft); line-height: 1.55; max-width: 38ch; }
+.jstep__chip { margin-top: 16px; display: inline-flex; }
+.journey .chip { background: var(--j-chip-bg); border-color: var(--j-chip-border); color: var(--j-chip-ink); white-space: nowrap; }
+.journey__sticky[data-stage="0"] .jstep[data-s="0"],
+.journey__sticky[data-stage="1"] .jstep[data-s="1"],
+.journey__sticky[data-stage="2"] .jstep[data-s="2"],
+.journey__sticky[data-stage="3"] .jstep[data-s="3"] { opacity: 1; transform: none; }
+
+/* métriques vivantes */
+.jmetrics { display: flex; gap: 36px; flex-wrap: wrap; margin-bottom: 34px; }
+.jmetric { display: flex; flex-direction: column; gap: 6px; }
+.jmetric__v { font-size: clamp(2.6rem, 5vw, 4rem); font-weight: 700; color: var(--j-ink); line-height: .9; letter-spacing: -.03em; font-variant-numeric: tabular-nums; display: flex; align-items: baseline; gap: 6px; }
+.jmetric__v.is-elec { color: var(--j-accent); text-shadow: 0 0 30px var(--j-glow); }
+.jmetric__v i { font-style: normal; font-size: .4em; font-weight: 500; color: var(--j-soft); }
+.jmetric__l { font-size: .82rem; letter-spacing: .04em; color: var(--j-faint); }
+
+/* rail pipeline */
+.jrail { position: relative; margin-top: 6px; }
+.jrail__track { height: 2px; background: var(--j-track); position: relative; }
+.jrail__fill { position: absolute; left: 0; top: 0; height: 100%; width: calc(var(--p) * 100%); background: var(--j-accent); box-shadow: var(--j-fillglow); }
+.jrail__nodes { display: flex; justify-content: space-between; margin-top: 14px; }
+.jnode { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; font-size: .72rem; color: var(--j-faint); transition: color .5s var(--ease); letter-spacing: .04em; }
+.jnode b { width: 11px; height: 11px; border-radius: 50%; background: var(--j-dotbg); border: 2px solid var(--j-dotborder); transition: all .5s var(--ease); }
+.journey__sticky[data-stage="0"] .jnode:nth-child(1),
+.journey__sticky[data-stage="1"] .jnode:nth-child(-n+2),
+.journey__sticky[data-stage="2"] .jnode:nth-child(-n+3),
+.journey__sticky[data-stage="3"] .jnode:nth-child(-n+4) { color: var(--j-ink); }
+.journey__sticky[data-stage="0"] .jnode:nth-child(1) b,
+.journey__sticky[data-stage="1"] .jnode:nth-child(-n+2) b,
+.journey__sticky[data-stage="2"] .jnode:nth-child(-n+3) b,
+.journey__sticky[data-stage="3"] .jnode:nth-child(-n+4) b { background: var(--j-accent); border-color: var(--j-accent); box-shadow: var(--j-dotglow); }
+
+/* document qui se transforme */
+.docstage { position: relative; height: min(62vh, 540px); display: flex; align-items: center; justify-content: center; }
+.doc { position: relative; width: clamp(220px, 24vw, 300px); aspect-ratio: 3 / 4; transition: transform .7s var(--ease); transform: rotate(-4deg); }
+.journey__sticky[data-stage="1"] .doc { transform: rotate(0deg) scale(1.02); }
+.journey__sticky[data-stage="2"] .doc { transform: rotate(2deg); }
+.journey__sticky[data-stage="3"] .doc { transform: rotate(0deg); }
+.sheet { position: absolute; inset: 0; background: var(--j-sheet); box-shadow: var(--j-sheet-shadow); padding: 22px; display: flex; flex-direction: column; gap: 11px; }
+.journey--light .sheet { border: 1px solid var(--border); }
+.sheet__bar { height: 9px; background: var(--j-sheet-bar); }
+.sheet__bar.s { width: 58%; }
+.sheet__bar.g { background: var(--vert); width: 42%; }
+.sheet__sp { flex: 1; }
+
+.layer { position: absolute; inset: 0; opacity: 0; transition: opacity .6s var(--ease); pointer-events: none; }
+.journey__sticky[data-stage="0"] .layer--s0,
+.journey__sticky[data-stage="1"] .layer--s1,
+.journey__sticky[data-stage="2"] .layer--s2,
+.journey__sticky[data-stage="3"] .layer--s3 { opacity: 1; }
+
+/* seal générique (réutilisé par plusieurs scènes) */
+.dseal { position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); border: 2px solid var(--vert); color: var(--vert); font-weight: 700; font-size: .68rem; letter-spacing: .12em; padding: .3rem .6rem; background: rgba(255,255,255,.9); white-space: nowrap; }
+.journey .dseal { color: var(--j-accent); border-color: var(--j-accent); }
+.journey--light .dseal { color: var(--vert); border-color: var(--vert); background: #fff; }
+
+/* ====================== SCÈNES ENTRANT (sombre) ====================== */
+.layer--mail .flap { position: absolute; left: -10%; right: -10%; top: -8%; height: 44%; background: #e2e9e5; clip-path: polygon(0 0, 100% 0, 50% 100%); box-shadow: 0 10px 24px rgba(0,0,0,.3); }
+.layer--mail .stamp { position: absolute; right: 8%; top: 9%; width: 40px; height: 30px; background: var(--vert); }
+
+.layer--scan .grid { position: absolute; inset: 0; opacity: .4; background-image: linear-gradient(rgba(0,117,88,.25) 1px, transparent 1px), linear-gradient(90deg, rgba(0,117,88,.25) 1px, transparent 1px); background-size: 18px 18px; }
+.layer--scan .beam { position: absolute; left: 0; right: 0; height: 26%; background: linear-gradient(180deg, transparent, rgba(0,200,150,.55), transparent); box-shadow: 0 0 30px rgba(0,200,150,.7); animation: beam 2.4s var(--ease) infinite; }
+@keyframes beam { 0% { top: -26%; } 100% { top: 100%; } }
+@media (prefers-reduced-motion: reduce) { .layer--scan .beam { animation: none; top: 38%; } }
+
+.layer--share .ghost { position: absolute; inset: 0; background: #e9efeb; box-shadow: 0 24px 50px rgba(0,0,0,.4); }
+.layer--share .g1 { transform: translate(16px, 16px) rotate(5deg); opacity: .55; }
+.layer--share .g2 { transform: translate(30px, 30px) rotate(9deg); opacity: .3; }
+.layer--share .node { position: absolute; width: 30px; height: 30px; border-radius: 50%; background: rgba(0,200,150,.16); border: 1.5px solid var(--vert-elec); display: grid; place-items: center; color: var(--vert-elec); font-size: .8rem; }
+.layer--share .n1 { top: -6%; right: -14%; } .layer--share .n2 { bottom: 4%; right: -16%; } .layer--share .n3 { bottom: 24%; left: -16%; }
+
+.layer--archive .vault { position: absolute; inset: -6%; border: 2px solid rgba(0,200,150,.35); }
+.layer--archive .shield { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 90px; height: 104px; background: rgba(6,16,12,.9); border: 2px solid var(--vert-elec); clip-path: polygon(50% 0, 100% 16%, 100% 60%, 50% 100%, 0 60%, 0 16%); display: grid; place-items: center; box-shadow: 0 0 36px rgba(0,200,150,.4); }
+.layer--archive .shield::after { content: ""; width: 26px; height: 22px; border: 3px solid var(--vert-elec); border-bottom: 0; border-radius: 14px 14px 0 0; box-shadow: 0 26px 0 -8px var(--vert-elec); }
+
+/* ====================== SCÈNES SORTANT (clair) ====================== */
+/* s0 — Éditique / composition : champs personnalisés + caret */
+.layer--compose .ln { position: absolute; left: 22px; height: 9px; background: var(--vert); opacity: .85; }
+.layer--compose .l1 { top: 22px; width: 38%; }
+.layer--compose .l2 { top: 53px; width: 52%; }
+.layer--compose .caret { position: absolute; left: calc(22px + 52%); top: 51px; width: 2px; height: 13px; background: var(--vert); animation: caret 1.05s steps(1) infinite; }
+@keyframes caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .layer--compose .caret { animation: none; } }
+
+/* s1 — Cachet 2D-Doc : datamatrix */
+.layer--seal2d .dm { position: absolute; right: 12%; bottom: 13%; width: 56px; height: 56px; background-color: #fff; border: 2px solid var(--t1);
+  background-image: repeating-conic-gradient(var(--t1) 0% 25%, #fff 0% 50%); background-size: 9.3px 9.3px; box-shadow: 0 6px 16px rgba(8,20,16,.18); }
+.layer--seal2d .dm::after { content: ""; position: absolute; inset: 0; border: 2px solid var(--vert); animation: dmpulse 2s var(--ease) infinite; }
+@keyframes dmpulse { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .layer--seal2d .dm::after { animation: none; opacity: .9; } }
+
+/* s2 — Signature électronique : ligne + coche */
+.layer--sign .sigline { position: absolute; left: 18%; right: 18%; bottom: 32%; height: 2px; background: var(--border); }
+.layer--sign .sig { position: absolute; left: 20%; bottom: 30%; width: 84px; height: 26px; border-bottom: 2px solid transparent;
+  background: linear-gradient(120deg, transparent 0 8%, var(--vert) 8% 10%, transparent 10% 30%, var(--vert) 30% 32%, transparent 32% 58%, var(--vert) 58% 60%, transparent 60%) no-repeat;
+  transform: rotate(-3deg); transform-origin: left bottom; }
+.layer--sign .check { position: absolute; right: 14%; bottom: 30%; width: 40px; height: 40px; border-radius: 50%; background: var(--vert); display: grid; place-items: center; color: #fff; font-size: 1.2rem; font-weight: 700; box-shadow: 0 8px 20px rgba(0,117,88,.3); animation: pop .5s var(--ease); }
+@keyframes pop { from { transform: scale(.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* s3 — Recommandé LRE : avion + remise */
+.layer--send .plane { position: absolute; right: 16%; top: 26%; width: 46px; height: 46px; background: var(--vert);
+  clip-path: polygon(0 0, 100% 50%, 0 100%, 22% 50%); box-shadow: 0 10px 24px rgba(0,117,88,.3); animation: fly 2.4s var(--ease) infinite; }
+@keyframes fly { 0% { transform: translate(-10px,6px); } 50% { transform: translate(10px,-8px); } 100% { transform: translate(-10px,6px); } }
+@media (prefers-reduced-motion: reduce) { .layer--send .plane { animation: none; } }
+.layer--send .trail { position: absolute; left: 12%; top: 42%; width: 52%; height: 2px;
+  background: repeating-linear-gradient(90deg, var(--vert) 0 8px, transparent 8px 16px); opacity: .55; }
+
+/* indice de défilement */
+.jcue { position: absolute; right: 4%; bottom: 26px; z-index: 3; display: flex; align-items: center; gap: 10px; color: var(--j-faint); font-size: .66rem; letter-spacing: .16em; text-transform: uppercase; }
+.jcue__bar { width: 34px; height: 1px; background: var(--j-track); position: relative; overflow: hidden; }
+.jcue__bar::after { content: ""; position: absolute; left: -40%; top: 0; width: 40%; height: 100%; background: var(--j-accent); animation: jcue 1.8s var(--ease) infinite; }
+@keyframes jcue { to { left: 110%; } }
+.journey__sticky[data-stage="3"] .jcue { opacity: 0; transition: opacity .4s var(--ease); }
+@media (prefers-reduced-motion: reduce) { .jcue__bar::after { animation: none; } }
+
+@media (max-width: 860px) {
+  .journey { height: 400vh; }
+  .journey__grid { grid-template-columns: 1fr; gap: 24px; align-content: center; padding: 90px 0 30px; }
+  .docstage { height: 36vh; order: -1; }
+  .jindex { font-size: 30vh; top: 12%; right: -2%; }
+  .jstep__d { display: none; }
+  .jpanel__steps { height: 132px; }
+  .jcue { display: none; }
+}

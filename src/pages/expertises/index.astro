@@ -17,12 +17,12 @@ const expertises = (await getCollection('expertises')).sort((a, b) => a.data.ord
     </div>
   </header>
 
-  <section class="reveal">
+  <section class="lsec reveal">
     <div class="wrap">
       <div class="tuiles">
         {expertises.map((e) => (
           <a class="tuile" href={url(`/expertises/${e.slug}`)}>
-            <span class="norme">{e.data.norme}</span>
+            <span class="chip">{e.data.norme}</span>
             <h3>{e.data.titre}</h3>
             <p>{e.data.resume}</p>
             <span class="more arrow">En savoir plus </span>

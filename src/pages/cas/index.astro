@@ -22,20 +22,20 @@ const expertisesPresentes = [...new Set(casList.flatMap((c) => c.data.expertises
     </div>
   </header>
 
-  <section class="reveal">
+  <section class="lsec reveal">
     <div class="wrap">
-      <div class="filter-group">
+      <div class="filters">
         <span class="gl">Secteur</span>
-        <button class="chip active" data-filter="secteur" data-value="*" aria-pressed="true">Tous</button>
+        <button class="fltchip active" data-filter="secteur" data-value="*" aria-pressed="true">Tous</button>
         {secteursPresents.map((s) => (
-          <button class="chip" data-filter="secteur" data-value={s} aria-pressed="false">{SECTEUR_LABELS[s] ?? s}</button>
+          <button class="fltchip" data-filter="secteur" data-value={s} aria-pressed="false">{SECTEUR_LABELS[s] ?? s}</button>
         ))}
       </div>
-      <div class="filter-group" style="margin-top:10px;">
+      <div class="filters" style="margin-top:10px;">
         <span class="gl">Expertise</span>
-        <button class="chip active" data-filter="expertise" data-value="*" aria-pressed="true">Toutes</button>
+        <button class="fltchip active" data-filter="expertise" data-value="*" aria-pressed="true">Toutes</button>
         {expertisesPresentes.map((e) => (
-          <button class="chip" data-filter="expertise" data-value={e} aria-pressed="false">{EXPERTISE_LABELS[e] ?? e}</button>
+          <button class="fltchip" data-filter="expertise" data-value={e} aria-pressed="false">{EXPERTISE_LABELS[e] ?? e}</button>
         ))}
       </div>
 
@@ -72,7 +72,7 @@ const expertisesPresentes = [...new Set(casList.flatMap((c) => c.data.expertises
       });
       if (empty) empty.style.display = visible === 0 ? '' : 'none';
     }
-    document.querySelectorAll('.chip[data-filter]').forEach((btn) => {
+    document.querySelectorAll('.fltchip[data-filter]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const f = btn.dataset.filter === 'secteur' ? 'secteur' : 'expertise';
         state[f] = btn.dataset.value;

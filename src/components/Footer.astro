@@ -1,62 +1,44 @@
 ---
-import { url, CALENDLY, LINKEDIN, LIEU } from '../lib/url.js';
-const annee = 2026;
+import { url, CALENDLY } from '../lib/url.js';
+const home = (hash) => `${url('/')}${hash}`.replace('//', '/');
 const expertises = [
   { href: '/expertises/bpo-courrier-entrant', label: 'Courrier entrant (BPO)' },
-  { href: '/expertises/numerisation-nf544', label: 'Numérisation NF 544' },
-  { href: '/expertises/archivage-electronique-nf461', label: 'Archivage SAE NF 461' },
-  { href: '/expertises/recommande-electronique-eidas', label: 'Recommandé électronique' },
-  { href: '/expertises/ged-documents-vivants', label: 'GED' },
-  { href: '/expertises/editique-confiance', label: 'Éditique & confiance' },
-];
-const secteurs = [
-  { href: '/secteurs/banque', label: 'Banque' },
-  { href: '/secteurs/secteur-public', label: 'Secteur public' },
-  { href: '/secteurs/assurance', label: 'Assurance' },
-  { href: '/secteurs/protection-sociale', label: 'Protection sociale' },
-  { href: '/secteurs/courtage', label: 'Courtage' },
-  { href: '/secteurs/collectivites', label: 'Collectivités' },
+  { href: '/expertises/numerisation-nf544', label: 'Copie fidèle NF 544' },
+  { href: '/expertises/archivage-electronique-nf461', label: 'Archivage NF 461' },
+  { href: '/expertises/recommande-electronique-eidas', label: 'Recommandé eIDAS' },
+  { href: '/expertises/ged-documents-vivants', label: 'GED & éditique' },
 ];
 ---
-<footer class="site">
+<footer class="foot">
   <div class="wrap">
-    <div class="ft-top">
-      <span class="liseret" aria-hidden="true"></span>
-      <span>
-        <span class="nom">Willie Leroux</span><br />
-        <span class="sous">Ingénieur d'affaires · éditique &amp; communication multimodale</span>
-        <span class="sous" style="opacity:.85">Au sein de DocOne · Mérignac (33), Nouvelle-Aquitaine</span>
-      </span>
-    </div>
-
-    <div class="ft-cols">
-      <div>
+    <div class="foot__in">
+      <div class="foot__brand-col">
+        <div class="foot__brand"><span class="liseret" aria-hidden="true"></span> Willie Leroux</div>
+        <p class="foot__about">Simplifier, automatiser, sécuriser. Ingénieur d'affaires chez DocOne, j'industrialise l'ensemble de votre cycle documentaire, de la numérisation des flux entrants à l'archivage légal à valeur probante. Ce site est mon blog personnel&#8239;: vous y trouverez une veille et des conseils concrets pour moderniser la gestion de vos documents, de l'éditique au numérique.</p>
+      </div>
+      <div class="foot__col">
         <h4>Expertises</h4>
-        {expertises.map((e) => <a href={url(e.href)}>{e.label}</a>)}
+        <ul>
+          {expertises.map((e) => <li><a href={url(e.href)}>{e.label}</a></li>)}
+        </ul>
       </div>
-      <div>
-        <h4>Secteurs</h4>
-        {secteurs.map((s) => <a href={url(s.href)}>{s.label}</a>)}
-      </div>
-      <div>
-        <h4>Ressources</h4>
-        <a href={url('/cas')}>Bibliothèque de cas</a>
-        <a href={url('/veille')}>Veille</a>
-        <a href={url('/a-propos')}>À propos</a>
-        <a href={url('/rss.xml')}>Flux RSS</a>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <a href={CALENDLY} target="_blank" rel="noopener">Réserver 30 min</a>
-        <a href={LINKEDIN} target="_blank" rel="noopener">LinkedIn</a>
-        <a href={url('/#contact')}>Formulaire</a>
+      <div class="foot__col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href={home('#constat')}>Le constat</a></li>
+          <li><a href={home('#flux')}>Le flux</a></li>
+          <li><a href={url('/secteurs')}>Secteurs</a></li>
+          <li><a href={url('/cas')}>Cas & résultats</a></li>
+          <li><a href={url('/veille')}>Veille</a></li>
+          <li><a href={CALENDLY} target="_blank" rel="noopener">Réserver un échange</a></li>
+        </ul>
       </div>
     </div>
-
-    <div class="ft-legal">
-      <span>© {annee} Willie Leroux — {LIEU}</span>
-      <a href={url('/mentions-legales')}>Mentions légales</a>
-      <span>Codes inspirés du Système de Design de l'État, sans bloc-marque officiel.</span>
+    <div class="foot__bottom">
+      <span>© 2026 Willie Leroux · Ingénieur commercial chez DocOne — Mérignac, Nouvelle-Aquitaine · <a class="map-link" href={url('/mentions-legales')}>Mentions légales</a></span>
+      <div class="normes">
+        <span>NF 544</span><span>NF 461</span><span>ISO 27001</span><span>HDS</span><span>eIDAS</span><span>RGPD</span>
+      </div>
     </div>
   </div>
 </footer>

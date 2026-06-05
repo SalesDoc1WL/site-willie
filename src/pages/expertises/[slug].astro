@@ -1,10 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumb from '../../components/Breadcrumb.astro';
 import DiagnosticCTA from '../../components/DiagnosticCTA.astro';
 import RelatedList from '../../components/RelatedList.astro';
-import CasCard from '../../components/CasCard.astro';
+import { url } from '../../lib/url.js';
 import { EXPERTISE_TAGS, secteurLabel } from '../../lib/labels.js';
 
 export async function getStaticPaths() {
@@ -26,46 +25,72 @@ const veille = (await getCollection('veille', ({ data }) => !data.draft))
 
 const secteurLinks = entry.data.secteursLies.map((s) => ({ href: `/secteurs/${s}`, label: secteurLabel(s) }));
 const veilleLinks = veille.map((a) => ({ href: `/veille/${a.slug}`, label: a.data.titre }));
+const secteursTxt = entry.data.secteursLies.map((s) => secteurLabel(s)).join(', ');
 
-const jsonld = {
-  '@context': 'https://schema.org',
-  '@type': 'Service',
-  name: entry.data.titre,
-  serviceType: entry.data.norme,
-  description: entry.data.resume,
-  url: Astro.url.href,
-  areaServed: { '@type': 'Country', name: 'France' },
-  provider: { '@type': 'Person', name: 'Willie Leroux', sameAs: ['https://www.linkedin.com/in/willie-leroux-docone/'] },
-};
+const jsonld = [
+  {
+    '@context': 'https://schema.org', '@type': 'Service',
+    name: entry.data.titre, serviceType: entry.data.norme, description: entry.data.resume, url: Astro.url.href,
+    areaServed: { '@type': 'Country', name: 'France' },
+    provider: { '@type': 'Person', name: 'Willie Leroux', sameAs: ['https://www.linkedin.com/in/willie-leroux-docone/'] },
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: new URL(url('/'), Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Expertises', item: new URL(url('/expertises'), Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: entry.data.titre },
+    ],
+  },
+];
 ---
-<BaseLayout title={entry.data.titre} description={entry.data.seoDescription ?? entry.data.resume} jsonld={jsonld}>
-  <Breadcrumb items={[{ label: 'Expertises', href: '/expertises' }, { label: entry.data.titre }]} />
-  <header class="page-head">
-    <div class="wrap">
-      <span class="overline">{entry.data.norme}</span>
+<BaseLayout title={entry.data.titre} description={entry.data.seoDescription ?? entry.data.resume} jsonld={jsonld} readingBar>
+  <section class="ihero">
+    <div class="wrap ihero__in">
+      <nav class="crumb" aria-label="Fil d'ariane">
+        <a href={url('/')}>Accueil</a><span class="sep">/</span>
+        <a href={url('/expertises')}>Expertises</a><span class="sep">/</span>
+        <span class="cur">{entry.data.titre}</span>
+      </nav>
+      <div class="ihero__kicker">
+        <span class="chip">{entry.data.norme}</span>
+        <span class="overline">Expertise</span>
+      </div>
       <h1>{entry.data.titre}</h1>
-      <p>{entry.data.resume}</p>
+      <p class="ihero__lead">{entry.data.resume}</p>
+      <div class="ihero__meta">
+        <div><span class="k">Norme</span><span class="v">{entry.data.norme}</span></div>
+        {secteursTxt && <div><span class="k">Secteurs</span><span class="v">{secteursTxt}</span></div>}
+      </div>
     </div>
-  </header>
+  </section>
 
-  <section class="reveal">
+  <section class="ibody">
     <div class="wrap">
       <article class="prose"><Content /></article>
     </div>
   </section>
 
   {casList.length > 0 && (
-    <section class="reveal">
+    <section class="related">
       <div class="wrap">
-        <span class="overline">Cas liés</span>
-        <h2 class="sec-title">Cette expertise en situation.</h2>
-        <div class="refs">{casList.map((c) => <CasCard cas={c} />)}</div>
+        <div class="eyebrow"><span class="no">→</span> Cette expertise en situation</div>
+        <div class="related__grid">
+          {casList.map((c) => (
+            <a class="rcard" href={url(`/cas/${c.slug}`)}>
+              <span class="k">{secteurLabel(c.data.secteur)}</span>
+              <b>{c.data.titre}</b>
+              <span class="d">{c.data.resume}</span>
+              <span class="more">Lire le cas <span class="arr">→</span></span>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   )}
 
   {(secteurLinks.length > 0 || veilleLinks.length > 0) && (
-    <section class="reveal">
+    <section class="lsec alt">
       <div class="wrap">
         <RelatedList titre="Secteurs concernés" links={secteurLinks} />
         <RelatedList titre="À lire dans la veille" links={veilleLinks} />
@@ -73,5 +98,5 @@ const jsonld = {
     </section>
   )}
 
-  <DiagnosticCTA />
+  <DiagnosticCTA titre="Une question sur cette expertise ? Parlons-en." texte="Trente minutes, sans démonstration produit ni engagement, pour voir si ce levier a du sens dans votre contexte." />
 </BaseLayout>

@@ -1,30 +1,223 @@
-/* Tokens — Design System Willie Leroux (charte DocOne, codes DSFR) */
-:root {
-  /* Couleurs */
-  --vert: #007558;        /* corrige WCAG AA : 5,70:1 sur blanc (etait #00906C, 4,03:1) */
-  --vert-h: #00543f;       /* hover plus fonce que le nouveau vert principal */
-  --vert-a: #00543f;
-  --vert-elec: #00C896;
-  --gris: #707070;
-  --gris-fonce: #4a4a4a;
-  --t1: #161616;
-  --t2: #3a3a3a;
-  --t-mention: #666;
-  --bg: #ffffff;
-  --alt: #f5f7f6;
-  --contrast: #eceeed;
-  --callout: #edf6f2;
-  --border: #dddddd;
-  --border-vert: #bfe0d5;
+/* =====================================================================
+   Willie Leroux — DocOne Design System
+   colors_and_type.css
 
-  /* Typo */
-  --ff: 'Marianne', Arial, sans-serif;
+   Foundation tokens for the Willie Leroux / DocOne flux-documentaires
+   brand. Charte DocOne, built on the codes of the French State Design
+   System (DSFR) — green accent + Marianne type — WITHOUT the official
+   "Marianne / Liberté Égalité Fraternité" state block-mark.
 
-  /* Layout */
-  --max: 1248px;
+   Source of truth: SalesDoc1WL/site-willie  (src/styles/tokens.css +
+   src/styles/global.css). WCAG-corrected greens preserved from the repo.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   FONT — Marianne (DSFR CDN). The repo references these woff2 files
+   directly from the gouvfr DSFR package; we keep the same CDN so the
+   weights match the production site exactly. If you need offline fonts,
+   drop the woff2 files into fonts/ and repoint these src URLs.
+   --------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Marianne';
+  src: url('https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.13.0/dist/fonts/Marianne-Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Marianne';
+  src: url('https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.13.0/dist/fonts/Marianne-Medium.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Marianne';
+  src: url('https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.13.0/dist/fonts/Marianne-Bold.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
 }
 
-/* Police Marianne (CDN DSFR) */
-@font-face { font-family: 'Marianne'; src: url('https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.13.0/dist/fonts/Marianne-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
-@font-face { font-family: 'Marianne'; src: url('https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.13.0/dist/fonts/Marianne-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
-@font-face { font-family: 'Marianne'; src: url('https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@1.13.0/dist/fonts/Marianne-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+:root {
+  /* ===================================================================
+     COLOR — RAW PALETTE
+     Names kept from the repo (French) with English aliases for clarity.
+     =================================================================== */
+
+  /* Brand green (DocOne). --vert is WCAG-AA corrected (5.70:1 on white,
+     was #00906C at 4.03:1). Keep --vert for text/UI; --vert-brand is the
+     original lighter brand green, fine for large fills / decoration. */
+  --vert:        #007558;   /* primary green — text + UI safe        */
+  --vert-h:      #00543f;   /* hover / pressed — darker green         */
+  --vert-a:      #00543f;   /* active surface (diagnostic band)       */
+  --vert-brand:  #00906C;   /* original DocOne green (large fills)    */
+  --vert-elec:   #00C896;   /* electric green — accents on dark only  */
+
+  /* Neutrals / ink */
+  --t1:          #161616;   /* primary text (near-black)              */
+  --t2:          #3a3a3a;   /* body text                              */
+  --t-mention:   #666666;   /* captions, meta, legal                  */
+  --gris:        #707070;   /* mid grey (liseret lower half)          */
+  --gris-fonce:  #4a4a4a;   /* dark grey (norme chips)                */
+
+  /* Surfaces */
+  --bg:          #ffffff;   /* page background                        */
+  --alt:         #f5f7f6;   /* alternating section / input fill       */
+  --contrast:    #eceeed;   /* contrast block                         */
+  --callout:     #edf6f2;   /* green-tinted callout / pressed secondary */
+
+  /* Lines */
+  --border:      #dddddd;   /* hairline borders                       */
+  --border-vert: #bfe0d5;   /* green-tinted border (maillage chips)   */
+
+  /* ---- English semantic aliases (same values) ---- */
+  --fg1: var(--t1);
+  --fg2: var(--t2);
+  --fg-muted: var(--t-mention);
+  --accent: var(--vert);
+  --accent-hover: var(--vert-h);
+  --accent-electric: var(--vert-elec);
+  --surface: var(--bg);
+  --surface-alt: var(--alt);
+  --surface-callout: var(--callout);
+  --line: var(--border);
+  --line-accent: var(--border-vert);
+  --ink-inverse: #ffffff;
+
+  /* ===================================================================
+     TYPOGRAPHY — FAMILIES
+     One family does everything: Marianne (DSFR). Arial as metric-near
+     fallback. No serif, no separate display face — the brand is a single
+     sans, weight + size carry hierarchy.
+     =================================================================== */
+  --ff:         'Marianne', Arial, Helvetica, sans-serif;
+  --ff-sans:    var(--ff);
+  --ff-mono:    ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --fw-regular: 400;
+  --fw-medium:  500;   /* buttons, nav, labels                       */
+  --fw-bold:    700;   /* headings, overlines, stats, norme chips    */
+
+  /* ===================================================================
+     TYPE SCALE — fluid, matches the production homepage (ed-*)
+     Display sizes are clamp()ed for responsive hero/section headings.
+     =================================================================== */
+  --fs-display:  clamp(2.4rem, 6.6vw, 5.4rem);  /* hero H1            */
+  --fs-h1:       clamp(1.8rem, 3.6vw, 2.6rem);  /* page-head H1       */
+  --fs-h2:       clamp(1.9rem, 4.4vw, 3.3rem);  /* section H2         */
+  --fs-h3:       1.2rem;                          /* card / tuile H3   */
+  --fs-lead:     clamp(1.05rem, 1.6vw, 1.3rem);  /* hero lead         */
+  --fs-intro:    1.1rem;                          /* section intro     */
+  --fs-body:     1rem;                            /* base body         */
+  --fs-sm:       0.92rem;                         /* card body, meta   */
+  --fs-xs:       0.82rem;                         /* captions, legal   */
+  --fs-overline: 0.875rem;                        /* eyebrow / overline */
+
+  --lh-tight:   1.0;     /* hero display                              */
+  --lh-heading: 1.2;     /* headings                                  */
+  --lh-body:    1.6;     /* body copy                                 */
+
+  --ls-display: -0.03em; /* tight tracking on big display             */
+  --ls-heading: -0.025em;
+  --ls-overline: 0.02em; /* overlines: uppercase, slight positive ls  */
+  --ls-norme:   0.1em;   /* norme chips: wide tracking                */
+
+  /* ===================================================================
+     LAYOUT / SPACING / RADII / SHADOW
+     The DSFR-derived system is deliberately FLAT and SQUARE:
+     border-radius is 0 almost everywhere. Elevation comes from borders
+     and accent bottom/left rules, not shadows.
+     =================================================================== */
+  --max:   1248px;       /* content max-width (.wrap)                 */
+  --gutter: 24px;        /* .wrap horizontal padding                  */
+
+  --space-1: 6px;
+  --space-2: 12px;
+  --space-3: 18px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 72px;
+  --space-8: 112px;      /* large section padding (clamp upper)       */
+
+  --radius-0: 0;         /* default — squared corners (DSFR)          */
+  --radius-input: 0;     /* inputs are squared with bottom rule       */
+
+  /* Borders / accent rules */
+  --bw-hair: 1px;        /* hairline                                  */
+  --bw-accent: 4px;      /* accent bottom/left rule on cards          */
+  --bw-input: 2px;       /* input bottom border                       */
+  --bw-footer: 2px;      /* footer top rule (green)                   */
+
+  /* Elevation — used sparingly; the brand prefers borders to shadows */
+  --shadow-none: none;
+  --shadow-hover: 0 6px 18px rgba(8, 20, 16, 0.08);
+
+  /* Motion — gentle, fast, no bounce */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur-fast: 0.15s;
+  --dur:      0.25s;
+  --dur-reveal: 0.55s;
+}
+
+/* =====================================================================
+   SEMANTIC ELEMENT STYLES
+   Drop-in classes mirroring the production site. Apply .ds-scope to a
+   wrapper (or :root) to get base typography. These are intentionally
+   close to global.css so anything built here matches the live site.
+   ===================================================================== */
+.ds-scope, .ds-body {
+  font-family: var(--ff);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--t2);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.ds-scope h1, .ds-h1 {
+  font-family: var(--ff); font-weight: var(--fw-bold);
+  font-size: var(--fs-h1); line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading); color: var(--t1);
+}
+.ds-display {
+  font-family: var(--ff); font-weight: var(--fw-bold);
+  font-size: var(--fs-display); line-height: var(--lh-tight);
+  letter-spacing: var(--ls-display); color: var(--t1); max-width: 16ch;
+}
+.ds-scope h2, .ds-h2 {
+  font-family: var(--ff); font-weight: var(--fw-bold);
+  font-size: var(--fs-h2); line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading); color: var(--t1);
+}
+.ds-scope h3, .ds-h3 {
+  font-family: var(--ff); font-weight: var(--fw-bold);
+  font-size: var(--fs-h3); line-height: var(--lh-heading); color: var(--t1);
+}
+.ds-lead     { font-size: var(--fs-lead); color: var(--t2); line-height: 1.45; }
+.ds-intro    { font-size: var(--fs-intro); color: var(--t2); max-width: 62ch; }
+.ds-body-text, .ds-scope p { font-size: var(--fs-body); color: var(--t2); }
+.ds-small    { font-size: var(--fs-sm); color: var(--t2); }
+.ds-caption  { font-size: var(--fs-xs); color: var(--t-mention); }
+
+/* Overline / eyebrow — green, uppercase, bold */
+.ds-overline, .overline {
+  font-size: var(--fs-overline); font-weight: var(--fw-bold);
+  color: var(--vert); text-transform: uppercase;
+  letter-spacing: var(--ls-overline);
+}
+
+/* Norme chip — squared bordered acronym badge (NF 544, eIDAS…) */
+.ds-norme {
+  font-size: var(--fs-xs); font-weight: var(--fw-bold);
+  color: var(--gris-fonce); border: var(--bw-hair) solid var(--border);
+  padding: 0.35rem 0.8rem; letter-spacing: var(--ls-norme);
+  text-transform: uppercase; display: inline-block; background: #fff;
+}
+
+/* Links + inline code */
+.ds-scope a { color: var(--vert); text-decoration: none; }
+.ds-scope a:hover { color: var(--vert-h); }
+.ds-code, .ds-scope code {
+  font-family: var(--ff-mono); background: var(--alt);
+  padding: 0.1rem 0.35rem; font-size: 0.9em; color: var(--t1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0.01ms; --dur: 0.01ms; --dur-reveal: 0.01ms; }
+}

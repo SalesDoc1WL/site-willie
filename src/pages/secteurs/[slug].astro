@@ -31,14 +31,14 @@ const expertiseLinks = entry.data.expertisesPertinentes.map((e) => ({ href: `/ex
     </div>
   </header>
 
-  <section class="reveal">
+  <section class="lsec reveal">
     <div class="wrap">
       <article class="prose"><Content /></article>
     </div>
   </section>
 
   {expertiseLinks.length > 0 && (
-    <section class="reveal">
+    <section class="lsec reveal">
       <div class="wrap">
         <RelatedList titre="Expertises pertinentes pour ce secteur" links={expertiseLinks} />
       </div>
@@ -46,7 +46,7 @@ const expertiseLinks = entry.data.expertisesPertinentes.map((e) => ({ href: `/ex
   )}
 
   {casList.length > 0 && (
-    <section class="reveal">
+    <section class="lsec reveal">
       <div class="wrap">
         <span class="overline">Cas du secteur</span>
         <h2 class="sec-title">Ce que j'ai réalisé dans ce secteur.</h2>

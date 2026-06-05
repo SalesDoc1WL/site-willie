@@ -1,40 +1,28 @@
 ---
 import { url, CALENDLY } from '../lib/url.js';
-const path = Astro.url.pathname.replace(/\/$/, '');
+// Liens d'ancrage vers les sections de l'accueil (fonctionnent depuis toute page).
+const home = (hash) => `${url('/')}${hash}`.replace('//', '/');
 const nav = [
-  { href: '/expertises', label: 'Expertises' },
-  { href: '/secteurs', label: 'Secteurs' },
-  { href: '/cas', label: 'Cas' },
-  { href: '/veille', label: 'Veille' },
-  { href: '/a-propos', label: 'À propos' },
+  { href: home('#constat'), label: 'Le constat' },
+  { href: home('#flux'), label: 'Le flux' },
+  { href: home('#expertises'), label: 'Expertises' },
+  { href: home('#secteurs'), label: 'Secteurs' },
+  { href: home('#resultats'), label: 'Cas' },
+  { href: home('#veille'), label: 'Veille' },
 ];
-const isCurrent = (href) => path.includes(href);
 ---
-<header class="site">
-  <div class="wrap hd">
-    <a class="marque" href={url('/')} aria-label="Accueil — Willie Leroux">
+<header class="hdr">
+  <div class="wrap hdr__in">
+    <a class="hdr__brand" href={url('/')} aria-label="Accueil — Willie Leroux">
       <span class="liseret" aria-hidden="true"></span>
-      <span>
-        <span class="nom">Willie Leroux</span><br />
-        <span class="sous">Spécialiste de l’éditique &amp; de la communication multimodale</span>
-      </span>
+      <span>Willie Leroux<small>DocOne · Flux documentaires</small></span>
     </a>
-
-    <nav id="primary-nav" aria-label="Navigation principale">
-      {nav.map((n) => (
-        <a href={url(n.href)} aria-current={isCurrent(n.href) ? 'page' : undefined}>{n.label}</a>
-      ))}
+    <nav class="hdr__nav" id="nav" aria-label="Navigation principale">
+      {nav.map((n) => <a href={n.href}>{n.label}</a>)}
     </nav>
-
-    <div class="hd-cta">
-      <a class="btn btn-primary" href={CALENDLY} target="_blank" rel="noopener">Réserver un échange</a>
-      <button class="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="primary-nav">☰</button>
+    <div class="hdr__cta">
+      <a class="btn btn--elec" href={CALENDLY} target="_blank" rel="noopener">Échanger 30&#8239;min</a>
+      <button class="hdr__burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
-
-<style>
-  /* Tagline longue : lisible sans casser l'en-tête */
-  .marque .sous { max-width: 30ch; line-height: 1.2; display: inline-block; }
-  @media (max-width: 1100px) { .marque .sous { display: none; } }
-</style>

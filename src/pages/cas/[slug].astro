@@ -28,11 +28,11 @@ const secteurLink = [{ href: `/secteurs/${entry.data.secteur}`, label: secteurLa
   </header>
 
   {entry.data.chiffres.length > 0 && (
-    <section class="reveal">
+    <section class="lsec reveal">
       <div class="wrap">
         <div class="stats">
           {entry.data.chiffres.map((ch) => (
-            <div class="stat">
+            <div class="stat-box">
               <div class="num">{ch.valeur}</div>
               <div class="lab">{ch.label}</div>
             </div>
@@ -42,13 +42,13 @@ const secteurLink = [{ href: `/secteurs/${entry.data.secteur}`, label: secteurLa
     </section>
   )}
 
-  <section class="reveal">
+  <section class="lsec reveal">
     <div class="wrap">
       <article class="prose"><Content /></article>
     </div>
   </section>
 
-  <section class="reveal">
+  <section class="lsec reveal">
     <div class="wrap">
       <RelatedList titre="Expertises mobilisées" links={expertiseLinks} />
       <RelatedList titre="Secteur" links={secteurLink} />

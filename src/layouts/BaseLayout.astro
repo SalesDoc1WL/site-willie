@@ -10,6 +10,8 @@ const {
   ogImage = '/img/willie.jpg',
   type = 'website',
   jsonld = null,
+  client = 'interior', // 'home' sur l'accueil (séquences scroll), 'interior' ailleurs
+  readingBar = false,   // barre de progression de lecture (pages article/expertise)
 } = Astro.props;
 
 const titreComplet = title ? `${title} — Willie Leroux` : "Willie Leroux — Flux documentaires";
@@ -46,15 +48,13 @@ const jsonldList = jsonld ? (Array.isArray(jsonld) ? jsonld : [jsonld]) : [];
   {jsonldList.map((data) => (
     <script type="application/ld+json" set:html={JSON.stringify(data)} />
   ))}
-
-  <!-- Active les animations d'apparition uniquement si JS est dispo -->
-  <script is:inline>document.documentElement.classList.add('js-anim');</script>
 </head>
-<body>
-  <a class="skip" href="#main" style="position:absolute;left:-9999px;">Aller au contenu</a>
+<body class="theme-light">
+  <a class="skip" href="#main">Aller au contenu</a>
+  {readingBar && <div class="rprog"></div>}
   <Header />
   <main id="main"><slot /></main>
   <Footer />
-  <script src={url('/scripts/reveal.js')} is:inline></script>
+  <script src={url(`/scripts/${client}.js`)} is:inline></script>
 </body>
 </html>

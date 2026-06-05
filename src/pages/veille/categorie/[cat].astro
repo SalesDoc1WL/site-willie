@@ -31,7 +31,7 @@ const fmtDate = (d) => d.toLocaleDateString('fr-FR', { year: 'numeric', month: '
     </div>
   </header>
 
-  <section class="reveal">
+  <section class="lsec reveal">
     <div class="wrap">
       <div class="refs">
         {articles.map((a) => (
@@ -46,5 +46,5 @@ const fmtDate = (d) => d.toLocaleDateString('fr-FR', { year: 'numeric', month: '
     </div>
   </section>
 
-  <DiagnosticCTA aside={false} />
+  <DiagnosticCTA />
 </BaseLayout>

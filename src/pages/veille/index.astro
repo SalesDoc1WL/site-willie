@@ -20,11 +20,11 @@ const fmtDate = (d) => d.toLocaleDateString('fr-FR', { year: 'numeric', month: '
     </div>
   </header>
 
-  <section class="reveal">
+  <section class="lsec reveal">
     <div class="wrap">
-      <div class="filter-group">
-        <button class="chip active" data-value="*" aria-pressed="true">Toutes</button>
-        {categories.map((c) => <button class="chip" data-value={c} aria-pressed="false">{c}</button>)}
+      <div class="filters">
+        <button class="fltchip active" data-value="*" aria-pressed="true">Toutes</button>
+        {categories.map((c) => <button class="fltchip" data-value={c} aria-pressed="false">{c}</button>)}
       </div>
 
       <div class="refs" id="veille-grid" style="margin-top:32px;">
@@ -41,17 +41,17 @@ const fmtDate = (d) => d.toLocaleDateString('fr-FR', { year: 'numeric', month: '
     </div>
   </section>
 
-  <DiagnosticCTA aside={false} />
+  <DiagnosticCTA />
 </BaseLayout>
 
 <script is:inline>
   (function () {
     const items = [...document.querySelectorAll('.veille-item')];
     const empty = document.getElementById('veille-empty');
-    document.querySelectorAll('.chip[data-value]').forEach((btn) => {
+    document.querySelectorAll('.fltchip[data-value]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const val = btn.dataset.value;
-        document.querySelectorAll('.chip[data-value]').forEach((b) => {
+        document.querySelectorAll('.fltchip[data-value]').forEach((b) => {
           const on = b === btn; b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
         });
         let visible = 0;

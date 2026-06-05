@@ -4,7 +4,7 @@ import { url } from '../lib/url.js';
 const { titre, links = [] } = Astro.props;
 ---
 {links.length > 0 && (
-  <div class="related reveal">
+  <div class="rellinks reveal">
     <h2>{titre}</h2>
     <div class="chips-links">
       {links.map((l) => <a href={url(l.href)}>{l.label}</a>)}
