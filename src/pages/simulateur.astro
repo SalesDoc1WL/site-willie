@@ -1,0 +1,447 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import DiagnosticCTA from '../components/DiagnosticCTA.astro';
+import { url, CALENDLY, WEB3FORMS_KEY } from '../lib/url.js';
+
+const redirectUrl = new URL(url('/simulateur?rapport=envoye'), Astro.site).href + '#rapport-form';
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Simulateur de coûts du traitement documentaire',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  description: "Estimez le coût annuel de votre traitement documentaire papier (affranchissement, ETP, stockage) et l'économie potentielle après dématérialisation.",
+  url: Astro.url.href,
+  author: { '@type': 'Person', name: 'Willie Leroux', sameAs: ['https://www.linkedin.com/in/willie-leroux-docone/'] },
+};
+---
+<BaseLayout
+  title="Simulateur de coûts documentaires"
+  description="Estimez en deux minutes le coût annuel de votre traitement documentaire papier — affranchissement, temps de traitement (ETP), stockage physique — et l'économie potentielle après dématérialisation. Hypothèses transparentes et ajustables."
+  jsonld={jsonld}
+>
+  <Breadcrumb items={[{ label: 'Simulateur de coûts' }]} />
+  <header class="page-head">
+    <div class="wrap">
+      <span class="overline">Outil · estimation</span>
+      <h1>Combien vous coûte vraiment le papier&#8239;?</h1>
+      <p>Affranchissement, temps de traitement, stockage d'archives&#8239;: ces coûts sont réels mais rarement additionnés. Renseignez vos volumes, ajustez les hypothèses, et obtenez une estimation que vous pouvez défendre devant votre direction. Le résultat s'affiche immédiatement, sans inscription.</p>
+    </div>
+  </header>
+
+  <section class="lsec sim">
+    <div class="wrap sim__grid">
+      <!-- ENTRÉES -->
+      <form class="sim__inputs" id="sim-form" autocomplete="off">
+        <fieldset>
+          <legend>Vos volumes annuels</legend>
+          <label class="f">
+            <span>Courriers entrants reçus / an</span>
+            <input type="number" id="in-entrant" min="0" step="1000" value="50000" />
+          </label>
+          <label class="f">
+            <span>Courriers sortants envoyés / an</span>
+            <input type="number" id="in-sortant" min="0" step="1000" value="30000" />
+          </label>
+          <label class="f">
+            <span>Archives papier conservées (mètres linéaires)</span>
+            <input type="number" id="in-ml" min="0" step="10" value="500" />
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Hypothèses de coût <button type="button" class="sim__toggle" data-toggle="cost" aria-expanded="false">ajuster</button></legend>
+          <div class="sim__adv" id="adv-cost" hidden>
+            <label class="f"><span>Prix moyen d'un affranchissement (€)</span><input type="number" id="in-timbre" min="0" step="0.01" value="1.39" /></label>
+            <label class="f"><span>Temps de traitement d'un courrier entrant (min)</span><input type="number" id="in-min" min="0" step="0.5" value="3" /></label>
+            <label class="f"><span>Coût horaire chargé d'un agent (€)</span><input type="number" id="in-taux" min="0" step="1" value="25" /></label>
+            <label class="f"><span>Coût de stockage (€ / mètre linéaire / an)</span><input type="number" id="in-ml-cout" min="0" step="0.5" value="8" /></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Hypothèses de gain après dématérialisation</legend>
+          <label class="f f--range">
+            <span>Part du courrier sortant dématérialisable <b id="lab-demat">50&#8239;%</b></span>
+            <input type="range" id="in-demat" min="0" max="100" step="5" value="50" />
+          </label>
+          <label class="f f--range">
+            <span>Réduction du temps de traitement <b id="lab-etp">70&#8239;%</b></span>
+            <input type="range" id="in-redetp" min="0" max="100" step="5" value="70" />
+          </label>
+          <label class="f f--range">
+            <span>Réduction du stockage physique <b id="lab-stock">85&#8239;%</b></span>
+            <input type="range" id="in-redstock" min="0" max="100" step="5" value="85" />
+          </label>
+        </fieldset>
+
+        <p class="sim__note">Ces valeurs sont des <b>hypothèses ajustables</b>, pas des promesses. Les défauts s'appuient sur des ordres de grandeur du marché (tarif Lettre Verte La&#8239;Poste&#8239;2025, coût horaire chargé indicatif, coût d'archivage externe courant). Adaptez-les à votre contexte&#8239;: le calcul se met à jour en direct.</p>
+      </form>
+
+      <!-- RÉSULTAT -->
+      <aside class="sim__result" aria-live="polite">
+        <div class="sim__head">
+          <span class="sim__kicker">Économie annuelle estimée</span>
+          <div class="sim__big"><span id="r-economie">—</span></div>
+          <div class="sim__sub">soit <b id="r-economie-3ans">—</b> sur 3 ans</div>
+        </div>
+
+        <table class="sim__table">
+          <thead><tr><th>Poste</th><th>Actuel</th><th>Après</th><th>Économie</th></tr></thead>
+          <tbody>
+            <tr><td>Affranchissement</td><td id="r-affr-a">—</td><td id="r-affr-b">—</td><td id="r-affr-e">—</td></tr>
+            <tr><td>Traitement (ETP)</td><td id="r-etp-a">—</td><td id="r-etp-b">—</td><td id="r-etp-e">—</td></tr>
+            <tr><td>Stockage physique</td><td id="r-stock-a">—</td><td id="r-stock-b">—</td><td id="r-stock-e">—</td></tr>
+            <tr class="sim__total"><td>Total / an</td><td id="r-tot-a">—</td><td id="r-tot-b">—</td><td id="r-tot-e">—</td></tr>
+          </tbody>
+        </table>
+
+        <details class="sim__method">
+          <summary>Méthode &amp; formules</summary>
+          <ul>
+            <li><b>Affranchissement</b> = sortants/an × prix du timbre. Économie = part dématérialisable.</li>
+            <li><b>Traitement (ETP)</b> = entrants/an × minutes/pli ÷ 60 × coût horaire chargé. Économie = réduction du temps (numérisation + indexation).</li>
+            <li><b>Stockage</b> = mètres linéaires × coût annuel/ml. Économie = destruction des originaux après copie fidèle (NF&#8239;544).</li>
+          </ul>
+          <p class="sim__disclaim">Estimation indicative, hors coût de la solution de dématérialisation. Ne remplace pas un diagnostic chiffré.</p>
+        </details>
+
+        <div class="sim__cta">
+          <a class="btn btn--primary" href="#rapport-form">Obtenir le rapport (PDF ou e-mail) <span class="arr">→</span></a>
+          <p class="sim__note" style="margin-top:0">Le résultat ci-dessus est libre. Le rapport détaillé, mis en forme et partageable, demande un e-mail professionnel.</p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- TIER 2 : rapport par e-mail (gate honnête : valeur ajoutée, pas le résultat) -->
+    <div class="wrap sim__form-wrap" id="rapport-form">
+      <div id="rapport-success" class="form-success" hidden>
+        <strong>C'est noté.</strong> Votre estimation détaillée est prête (téléchargement lancé et/ou envoi par e-mail). Je vous recontacte pour en parler si utile — vous pouvez aussi <a href={CALENDLY} target="_blank" rel="noopener">réserver directement</a>.
+      </div>
+      <h2 class="sec-title">Recevoir l'estimation détaillée</h2>
+      <p class="sec-intro">Votre simulation, mise en forme, envoyée par e-mail — et une lecture à deux pour transformer ces ordres de grandeur en chiffres tenables sur votre périmètre réel.</p>
+      <form id="rapport-web3" class="sim__contact" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+        <input type="hidden" name="subject" value="Simulateur de coûts — demande de rapport" />
+        <input type="hidden" name="from_name" value="Simulateur — site Willie Leroux" />
+        <input type="hidden" name="redirect" value={redirectUrl} />
+        <input type="hidden" name="recapitulatif" id="h-recap" value="" />
+        <input type="hidden" name="intention" id="h-intent" value="" />
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none" />
+        <div class="row">
+          <label class="f"><span>Nom</span><input name="nom" type="text" autocomplete="name" placeholder="Votre nom" required minlength="2" /></label>
+          <label class="f"><span>Organisation</span><input name="organisation" type="text" autocomplete="organization" placeholder="Société, collectivité…" /></label>
+        </div>
+        <label class="f"><span>E-mail professionnel</span><input name="email" id="in-email" type="email" autocomplete="email" placeholder="vous@organisation.fr" required /></label>
+        <p class="sim__error" id="rapport-error" role="alert" hidden></p>
+        <div class="sim__foot">
+          <button class="btn btn--primary" type="submit" data-intent="email">Recevoir par e-mail <span class="arr">→</span></button>
+          <button class="btn btn--secondary" type="submit" data-intent="download">Télécharger le PDF</button>
+        </div>
+        <p class="sim__note">Vos données servent uniquement à préparer notre échange. Jamais cédées. Les adresses e-mail jetables sont refusées.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Rapport imprimable (PDF A4) — masqué à l'écran, charte « flyers » -->
+  <div class="sim__print" id="sim-print" aria-hidden="true">
+    <div class="pr-sheet">
+      <header class="pr-head">
+        <div class="pr-brand">
+          <span class="pr-liseret"></span>
+          <span class="pr-bn"><b>Willie Leroux</b><span>DocOne · Flux documentaires</span></span>
+        </div>
+        <span class="pr-chip">Estimation · coûts documentaires</span>
+      </header>
+      <div class="pr-body">
+        <div class="pr-eyebrow">Simulateur de maturité documentaire</div>
+        <h1 class="pr-h1">Ce que vous coûte le papier, en un coup d'œil.</h1>
+        <div id="print-body"></div>
+      </div>
+      <div class="pr-diag">
+        <span class="pr-ghost">30'</span>
+        <div class="pr-dleft">
+          <p class="pr-dover">Le diagnostic · 30 à 60 min</p>
+          <h2 class="pr-dtitle">Transformons cette estimation en chiffres tenables.</h2>
+          <p class="pr-dbody">Sans démonstration produit, sans engagement. On regarde vos flux réels — volumes, normes, contraintes — et où agir en priorité.</p>
+          <div class="pr-contacts"><span>calendly.com/willie-leroux38/30min</span><span>wleroux@docone.fr</span></div>
+        </div>
+      </div>
+      <footer class="pr-foot">
+        <span><b>Willie Leroux</b> — Ingénieur d'affaires en flux documentaires · DocOne, Mérignac (33)</span>
+        <span class="pr-url">willie-leroux.fr</span>
+      </footer>
+    </div>
+  </div>
+
+  <DiagnosticCTA titre="Vos chiffres, validés en trente minutes." texte="Le simulateur donne un ordre de grandeur. Un diagnostic le transforme en chiffres tenables sur votre périmètre réel — volumes, normes, contraintes. Sans démonstration produit, sans engagement." />
+</BaseLayout>
+
+<style>
+  .sim__grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(28px, 4vw, 56px); align-items: start; }
+  .sim__inputs { min-width: 0; }
+  .sim fieldset { border: 0; border-top: 1px solid var(--border); padding: 22px 0 4px; margin: 0; }
+  .sim fieldset:first-child { border-top: 0; padding-top: 0; }
+  .sim legend { font-size: .74rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--vert); padding: 0; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .sim__toggle { font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--t-mention); background: none; border: 1px solid var(--border); padding: .25rem .6rem; cursor: pointer; transition: all var(--dur) var(--ease); }
+  .sim__toggle:hover { color: var(--vert); border-color: var(--vert); }
+  .sim .f { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+  .sim .f > span { font-size: .92rem; color: var(--t2); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .sim .f > span b { color: var(--vert); font-variant-numeric: tabular-nums; font-size: 1rem; }
+  .sim input[type="number"], .sim input[type="text"], .sim input[type="email"] {
+    font-family: var(--ff); font-size: 1rem; color: var(--t1); background: var(--alt);
+    border: 0; border-bottom: 2px solid var(--t2); padding: 11px 13px; border-radius: 0; width: 100%;
+    transition: border-color var(--dur) var(--ease);
+  }
+  .sim input:focus { outline: none; border-bottom-color: var(--vert); }
+  .sim input[type="range"] { width: 100%; accent-color: var(--vert); height: 26px; cursor: pointer; }
+  .sim__adv { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+  .sim__adv[hidden] { display: none; }
+  .sim__note { font-size: .82rem; color: var(--t-mention); line-height: 1.55; margin-top: 14px; max-width: 60ch; }
+
+  /* panneau résultat (collant) */
+  .sim__result { position: sticky; top: 90px; border: 1px solid var(--border); border-top: 3px solid var(--vert); background: var(--bg); }
+  .sim__head { padding: 26px 28px 22px; background: var(--callout); border-bottom: 1px solid var(--border); }
+  .sim__kicker { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--vert); }
+  .sim__big { font-size: clamp(2.4rem, 5vw, 3.4rem); font-weight: 700; color: var(--t1); letter-spacing: -.03em; line-height: 1.05; font-variant-numeric: tabular-nums; margin-top: 6px; }
+  .sim__sub { font-size: .95rem; color: var(--t2); margin-top: 4px; }
+  .sim__sub b { color: var(--t1); font-variant-numeric: tabular-nums; }
+  .sim__table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+  .sim__table th, .sim__table td { padding: 11px 14px; text-align: right; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+  .sim__table th:first-child, .sim__table td:first-child { text-align: left; font-variant-numeric: normal; }
+  .sim__table thead th { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--t-mention); }
+  .sim__table td:first-child { color: var(--t2); }
+  .sim__table .sim__total td { font-weight: 700; color: var(--t1); border-bottom: 0; border-top: 2px solid var(--t1); }
+  .sim__table tbody td:last-child { color: var(--vert); font-weight: 600; }
+  .sim__method { padding: 14px 28px 20px; border-top: 1px solid var(--border); }
+  .sim__method summary { font-size: .82rem; font-weight: 600; color: var(--t2); cursor: pointer; }
+  .sim__method ul { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .sim__method li { font-size: .85rem; color: var(--t2); line-height: 1.45; padding-left: 16px; position: relative; }
+  .sim__method li::before { content: "→"; position: absolute; left: 0; color: var(--vert); }
+  .sim__method li b { color: var(--t1); }
+  .sim__disclaim { font-size: .78rem; color: var(--t-mention); margin-top: 12px; line-height: 1.5; }
+  .sim__cta { display: flex; flex-direction: column; gap: 10px; padding: 0 28px 26px; }
+  .sim__cta .btn { justify-content: center; }
+
+  /* formulaire rapport */
+  .sim__form-wrap { margin-top: clamp(44px, 6vw, 72px); border-top: 1px solid var(--border); padding-top: clamp(36px, 5vw, 56px); }
+  .sim__contact { margin-top: 24px; max-width: 640px; display: grid; gap: 16px; }
+  .sim__contact .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .sim__foot { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
+  .sim__error { font-size: .9rem; font-weight: 600; color: #b42318; background: #fef2f1; border-left: 3px solid #b42318; padding: 10px 14px; margin: 4px 0 0; }
+
+  @media (max-width: 900px) {
+    .sim__grid { grid-template-columns: 1fr; }
+    .sim__result { position: static; }
+    .sim__adv { grid-template-columns: 1fr; }
+    .sim__contact .row { grid-template-columns: 1fr; }
+  }
+
+  /* rapport imprimable (PDF A4) — charte « flyers » */
+  .sim__print { display: none; }
+  @media print {
+    .sim__print { display: block; }
+    .pr-sheet { width: 210mm; min-height: 296mm; background: #fff; color: var(--t2); display: flex; flex-direction: column; --pad: 16mm; }
+    .pr-sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    .pr-head { flex: none; display: flex; align-items: center; justify-content: space-between; padding: 13mm var(--pad) 7mm; border-bottom: 1px solid var(--border); }
+    .pr-brand { display: flex; align-items: center; gap: 11px; }
+    .pr-liseret { width: 6px; height: 30px; background: linear-gradient(var(--vert) 0 50%, var(--gris) 50% 100%); flex: none; }
+    .pr-bn { display: flex; flex-direction: column; line-height: 1.15; }
+    .pr-bn b { font-size: 11.5pt; font-weight: 700; color: var(--t1); letter-spacing: -.01em; }
+    .pr-bn span { font-size: 7.6pt; color: var(--t-mention); letter-spacing: .02em; }
+    .pr-chip { font-size: 8.4pt; font-weight: 700; color: #fff; background: var(--vert); border: 1px solid var(--vert); padding: .34rem .72rem; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+
+    .pr-body { flex: 1; padding: 11mm var(--pad) 8mm; }
+    .pr-eyebrow { font-size: 9pt; font-weight: 700; color: var(--vert); text-transform: uppercase; letter-spacing: .1em; }
+    .pr-h1 { font-size: 24pt; font-weight: 700; color: var(--t1); line-height: 1.08; letter-spacing: -.025em; margin: 5mm 0 7mm; max-width: 22ch; }
+
+    .pr-vol { font-size: 9.5pt; color: var(--t-mention); margin: 0 0 5mm; }
+    .pr-eco { border: 1px solid var(--border); border-left: 4px solid var(--vert); background: var(--callout); padding: 6mm 7mm; margin-bottom: 7mm; }
+    .pr-eco-lab { display: block; font-size: 8.4pt; font-weight: 700; color: var(--vert); text-transform: uppercase; letter-spacing: .1em; }
+    .pr-eco-val { display: block; font-size: 34pt; font-weight: 700; color: var(--t1); letter-spacing: -.03em; line-height: 1.05; margin: 1.5mm 0; font-variant-numeric: tabular-nums; }
+    .pr-eco-sub { font-size: 10pt; color: var(--t2); }
+
+    .pr-table { width: 100%; border-collapse: collapse; font-size: 10.4pt; font-variant-numeric: tabular-nums; }
+    .pr-table th, .pr-table td { padding: 3.2mm 4mm; text-align: right; border-bottom: 1px solid var(--border); }
+    .pr-table th:first-child, .pr-table td:first-child { text-align: left; font-variant-numeric: normal; }
+    .pr-table thead th { font-size: 8pt; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--t-mention); border-bottom: 1px solid var(--t1); }
+    .pr-table td:first-child { color: var(--t2); }
+    .pr-table tbody td:last-child { color: var(--vert); font-weight: 700; }
+    .pr-table .pr-total td { font-weight: 700; color: var(--t1); border-top: 1.5px solid var(--t1); border-bottom: 0; }
+    .pr-note { font-size: 8.4pt; line-height: 1.5; color: var(--t-mention); margin: 5mm 0 0; }
+
+    .pr-diag { flex: none; position: relative; overflow: hidden; background: var(--vert); color: #fff; padding: 10mm var(--pad); }
+    .pr-ghost { position: absolute; right: 4mm; top: -14mm; font-size: 130pt; font-weight: 700; color: rgba(255,255,255,.10); line-height: 1; font-variant-numeric: tabular-nums; }
+    .pr-dleft { position: relative; }
+    .pr-dover { font-size: 9pt; font-weight: 700; color: var(--vert-elec); text-transform: uppercase; letter-spacing: .12em; margin: 0; }
+    .pr-dtitle { font-size: 16pt; font-weight: 700; color: #fff; line-height: 1.15; letter-spacing: -.02em; margin: 3mm 0 0; max-width: 28ch; }
+    .pr-dbody { font-size: 9.6pt; line-height: 1.5; color: rgba(255,255,255,.9); margin: 3.5mm 0 0; max-width: 60ch; }
+    .pr-contacts { display: flex; flex-wrap: wrap; gap: 4px 24px; margin: 5mm 0 0; }
+    .pr-contacts span { font-size: 10pt; font-weight: 500; color: #fff; }
+    .pr-contacts span::before { content: "→ "; color: var(--vert-elec); }
+
+    .pr-foot { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6mm var(--pad); border-top: 1px solid var(--border); font-size: 8pt; color: var(--t-mention); }
+    .pr-foot b { color: var(--t2); font-weight: 500; }
+    .pr-url { color: var(--vert); font-weight: 700; }
+  }
+</style>
+
+<!-- Isolation impression : ne garder que la feuille (cible des composants
+     hors-scope : Header/Footer/Breadcrumb/DiagnosticCTA). Doit être global. -->
+<style is:global>
+  @media print {
+    @page { size: A4; margin: 0; }
+    html, body { background: #fff !important; }
+    .hdr, .foot, .skip, .rprog, .breadcrumb, .duo-defs { display: none !important; }
+    #main > *:not(#sim-print) { display: none !important; }
+    #main, body { margin: 0 !important; padding: 0 !important; }
+    /* contenu injecté par JS (#print-body) — règles globales car sans scope Astro */
+    .pr-vol { font-size: 9.5pt; color: #666; margin: 0 0 5mm; }
+    .pr-eco { border: 1px solid #ddd; border-left: 4px solid #007558; background: #edf6f2; padding: 6mm 7mm; margin-bottom: 7mm; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .pr-eco-lab { display: block; font-size: 8.4pt; font-weight: 700; color: #007558; text-transform: uppercase; letter-spacing: .1em; }
+    .pr-eco-val { display: block; font-size: 34pt; font-weight: 700; color: #161616; letter-spacing: -.03em; line-height: 1.05; margin: 1.5mm 0; font-variant-numeric: tabular-nums; }
+    .pr-eco-sub { display: block; font-size: 10pt; color: #3a3a3a; }
+    .pr-table { width: 100%; border-collapse: collapse; font-size: 10.4pt; font-variant-numeric: tabular-nums; }
+    .pr-table th, .pr-table td { padding: 3.2mm 4mm; text-align: right; border-bottom: 1px solid #ddd; }
+    .pr-table th:first-child, .pr-table td:first-child { text-align: left; font-variant-numeric: normal; }
+    .pr-table thead th { font-size: 8pt; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #666; border-bottom: 1px solid #161616; }
+    .pr-table td:first-child { color: #3a3a3a; }
+    .pr-table tbody td:last-child { color: #007558; font-weight: 700; }
+    .pr-table .pr-total td { font-weight: 700; color: #161616; border-top: 1.5px solid #161616; border-bottom: 0; }
+    .pr-note { font-size: 8.4pt; line-height: 1.5; color: #666; margin: 5mm 0 0; }
+  }
+</style>
+
+<script is:inline define:vars={{ web3key: WEB3FORMS_KEY }}>
+  (function () {
+    var $ = function (id) { return document.getElementById(id); };
+    var eur = function (n) { return Math.round(n).toLocaleString('fr-FR') + ' €'; };
+    var num = function (id) { var v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : 0; };
+
+    var fields = ['in-entrant','in-sortant','in-ml','in-timbre','in-min','in-taux','in-ml-cout','in-demat','in-redetp','in-redstock'];
+
+    function compute() {
+      var entrant = num('in-entrant'), sortant = num('in-sortant'), ml = num('in-ml');
+      var timbre = num('in-timbre'), min = num('in-min'), taux = num('in-taux'), mlCout = num('in-ml-cout');
+      var pDemat = num('in-demat') / 100, pEtp = num('in-redetp') / 100, pStock = num('in-redstock') / 100;
+
+      var affrA = sortant * timbre;
+      var etpA = entrant * (min / 60) * taux;
+      var stockA = ml * mlCout;
+      var totA = affrA + etpA + stockA;
+
+      var affrB = affrA * (1 - pDemat);
+      var etpB = etpA * (1 - pEtp);
+      var stockB = stockA * (1 - pStock);
+      var totB = affrB + etpB + stockB;
+
+      var eco = totA - totB;
+
+      // labels sliders
+      $('lab-demat').textContent = Math.round(pDemat * 100) + ' %';
+      $('lab-etp').textContent = Math.round(pEtp * 100) + ' %';
+      $('lab-stock').textContent = Math.round(pStock * 100) + ' %';
+
+      // résultat
+      $('r-economie').textContent = eur(eco);
+      $('r-economie-3ans').textContent = eur(eco * 3);
+      $('r-affr-a').textContent = eur(affrA); $('r-affr-b').textContent = eur(affrB); $('r-affr-e').textContent = eur(affrA - affrB);
+      $('r-etp-a').textContent = eur(etpA); $('r-etp-b').textContent = eur(etpB); $('r-etp-e').textContent = eur(etpA - etpB);
+      $('r-stock-a').textContent = eur(stockA); $('r-stock-b').textContent = eur(stockB); $('r-stock-e').textContent = eur(stockA - stockB);
+      $('r-tot-a').textContent = eur(totA); $('r-tot-b').textContent = eur(totB); $('r-tot-e').textContent = eur(eco);
+
+      // récap texte (mail) + corps imprimable
+      var recap = [
+        'ESTIMATION COÛTS DOCUMENTAIRES',
+        'Volumes : ' + entrant.toLocaleString('fr-FR') + ' entrants/an, ' + sortant.toLocaleString('fr-FR') + ' sortants/an, ' + ml.toLocaleString('fr-FR') + ' ml d’archives',
+        'Affranchissement : ' + eur(affrA) + ' -> ' + eur(affrB) + ' (eco ' + eur(affrA - affrB) + ')',
+        'Traitement (ETP) : ' + eur(etpA) + ' -> ' + eur(etpB) + ' (eco ' + eur(etpA - etpB) + ')',
+        'Stockage : ' + eur(stockA) + ' -> ' + eur(stockB) + ' (eco ' + eur(stockA - stockB) + ')',
+        'TOTAL/an : ' + eur(totA) + ' -> ' + eur(totB),
+        'ECONOMIE ANNUELLE ESTIMEE : ' + eur(eco) + ' (' + eur(eco * 3) + ' sur 3 ans)',
+        'Hypotheses : affranch. dematerialisable ' + Math.round(pDemat*100) + '%, reduction ETP ' + Math.round(pEtp*100) + '%, reduction stockage ' + Math.round(pStock*100) + '%.'
+      ].join('\n');
+      $('h-recap').value = recap;
+
+      $('print-body').innerHTML =
+        '<p class="pr-vol">Volumes : ' + entrant.toLocaleString('fr-FR') + ' courriers entrants/an · ' + sortant.toLocaleString('fr-FR') + ' sortants/an · ' + ml.toLocaleString('fr-FR') + ' mètres linéaires d’archives.</p>' +
+        '<div class="pr-eco"><span class="pr-eco-lab">Économie annuelle estimée</span><span class="pr-eco-val">' + eur(eco) + '</span><span class="pr-eco-sub">soit ' + eur(eco * 3) + ' sur 3 ans.</span></div>' +
+        '<table class="pr-table"><thead><tr><th>Poste</th><th>Actuel</th><th>Après</th><th>Économie</th></tr></thead><tbody>' +
+        '<tr><td>Affranchissement</td><td>' + eur(affrA) + '</td><td>' + eur(affrB) + '</td><td>' + eur(affrA - affrB) + '</td></tr>' +
+        '<tr><td>Traitement (ETP)</td><td>' + eur(etpA) + '</td><td>' + eur(etpB) + '</td><td>' + eur(etpA - etpB) + '</td></tr>' +
+        '<tr><td>Stockage physique</td><td>' + eur(stockA) + '</td><td>' + eur(stockB) + '</td><td>' + eur(stockA - stockB) + '</td></tr>' +
+        '<tr class="pr-total"><td>Total / an</td><td>' + eur(totA) + '</td><td>' + eur(totB) + '</td><td>' + eur(eco) + '</td></tr>' +
+        '</tbody></table>' +
+        '<p class="pr-note">Hypothèses : affranchissement dématérialisable ' + Math.round(pDemat*100) + ' %, réduction du temps de traitement ' + Math.round(pEtp*100) + ' %, réduction du stockage ' + Math.round(pStock*100) + ' %. Estimation indicative, hors coût de la solution de dématérialisation. Ne remplace pas un diagnostic chiffré.</p>';
+    }
+
+    fields.forEach(function (id) { var el = $(id); if (el) el.addEventListener('input', compute); });
+
+    // toggle hypothèses de coût
+    var t = document.querySelector('.sim__toggle[data-toggle="cost"]');
+    if (t) t.addEventListener('click', function () {
+      var box = $('adv-cost'); var open = box.hasAttribute('hidden');
+      if (open) box.removeAttribute('hidden'); else box.setAttribute('hidden', '');
+      t.setAttribute('aria-expanded', String(open));
+    });
+
+    // empêcher submit du form d'entrées (pas de rechargement)
+    $('sim-form').addEventListener('submit', function (e) { e.preventDefault(); });
+
+    // anti-spam : domaines d'e-mails jetables refusés
+    var DISPOSABLE = {
+      'yopmail.com':1,'yopmail.fr':1,'yopmail.net':1,'mailinator.com':1,'guerrillamail.com':1,'guerrillamail.info':1,
+      'sharklasers.com':1,'grr.la':1,'spam4.me':1,'10minutemail.com':1,'10minutemail.net':1,'temp-mail.org':1,
+      'tempmail.com':1,'tempmail.net':1,'tempmailo.com':1,'throwawaymail.com':1,'getnada.com':1,'nada.email':1,
+      'trashmail.com':1,'trashmail.fr':1,'dispostable.com':1,'fakeinbox.com':1,'maildrop.cc':1,'mintemail.com':1,
+      'mohmal.com':1,'jetable.org':1,'spamgourmet.com':1,'emailondeck.com':1,'moakt.com':1,'tempr.email':1,
+      'mailnesia.com':1,'discard.email':1,'mvrht.com':1,'tmpmail.org':1,'mailcatch.com':1,'33mail.com':1,
+      'inboxbear.com':1,'mailsac.com':1,'tutanota.io':1,'burnermail.io':1,'mail-temp.com':1,'cock.li':1
+    };
+    function emailProblem(v) {
+      v = (v || '').trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return 'Adresse e-mail invalide.';
+      if (DISPOSABLE[v.split('@')[1]]) return 'Adresse jetable refusée. Merci d’indiquer un e-mail professionnel.';
+      return '';
+    }
+    var err = $('rapport-error');
+    function showErr(m) { if (!err) return; if (m) { err.textContent = m; err.hidden = false; } else { err.hidden = true; } }
+
+    // envoi rapport (Web3Forms AJAX) — un seul formulaire, deux intentions (e-mail / PDF)
+    var rf = $('rapport-web3');
+    if (location.search.indexOf('rapport=envoye') !== -1) {
+      var ok0 = $('rapport-success'); if (ok0) ok0.hidden = false; if (rf) rf.hidden = true;
+    }
+    rf.addEventListener('submit', function (e) {
+      e.preventDefault();
+      showErr('');
+      if (rf.botcheck && rf.botcheck.checked) return; // honeypot : bot silencieux
+      var intent = (e.submitter && e.submitter.dataset.intent) || 'email';
+      if (!rf.checkValidity()) { rf.reportValidity(); return; }
+      var pb = emailProblem($('in-email').value);
+      if (pb) { showErr(pb); $('in-email').focus(); return; }
+      compute();
+      $('h-intent').value = (intent === 'download' ? 'Téléchargement PDF' : 'Envoi e-mail');
+      var btn = e.submitter;
+      if (btn) { btn.dataset.lab = btn.innerHTML; btn.disabled = true; btn.textContent = 'Envoi…'; }
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(rf),
+      }).then(function (r) { return r.json(); }).then(function (data) {
+        if (data.success) {
+          if (intent === 'download') { window.print(); }
+          var ok = $('rapport-success'); if (ok) { ok.hidden = false; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+          rf.hidden = true;
+        } else { throw new Error(data.message || 'Erreur'); }
+      }).catch(function () {
+        if (btn) { btn.disabled = false; if (btn.dataset.lab) btn.innerHTML = btn.dataset.lab; }
+        showErr("L'envoi a échoué. Réessayez ou écrivez-moi via LinkedIn / Calendly.");
+      });
+    });
+
+    compute();
+  })();
+</script>
