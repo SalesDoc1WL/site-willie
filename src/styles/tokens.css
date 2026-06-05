@@ -1,8 +1,8 @@
 /* Tokens — Design System Willie Leroux (charte DocOne, codes DSFR) */
 :root {
   /* Couleurs */
-  --vert: #00906C;
-  --vert-h: #006e52;
+  --vert: #007558;        /* corrige WCAG AA : 5,70:1 sur blanc (etait #00906C, 4,03:1) */
+  --vert-h: #00543f;       /* hover plus fonce que le nouveau vert principal */
   --vert-a: #00543f;
   --vert-elec: #00C896;
   --gris: #707070;
