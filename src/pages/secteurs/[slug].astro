@@ -6,6 +6,7 @@ import DiagnosticCTA from '../../components/DiagnosticCTA.astro';
 import RelatedList from '../../components/RelatedList.astro';
 import CasCard from '../../components/CasCard.astro';
 import { expertiseLabel } from '../../lib/labels.js';
+import { url } from '../../lib/url.js';
 
 export async function getStaticPaths() {
   const secteurs = await getCollection('secteurs');
@@ -20,8 +21,17 @@ const casList = (await getCollection('cas', ({ data }) => !data.draft))
   .sort((a, b) => a.data.ordre - b.data.ordre);
 
 const expertiseLinks = entry.data.expertisesPertinentes.map((e) => ({ href: `/expertises/${e}`, label: expertiseLabel(e) }));
+
+const jsonld = {
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Accueil', item: new URL(url('/'), Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'Secteurs', item: new URL(url('/secteurs'), Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: entry.data.titre },
+  ],
+};
 ---
-<BaseLayout title={`${entry.data.titre} — flux documentaires`} description={entry.data.seoDescription ?? entry.data.resume}>
+<BaseLayout title={`${entry.data.titre} — flux documentaires`} description={entry.data.seoDescription ?? entry.data.resume} jsonld={jsonld}>
   <Breadcrumb items={[{ label: 'Secteurs', href: '/secteurs' }, { label: entry.data.titre }]} />
   <header class="page-head">
     <div class="wrap">
