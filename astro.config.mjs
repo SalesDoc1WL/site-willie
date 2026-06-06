@@ -9,4 +9,9 @@ export default defineConfig({
   trailingSlash: 'ignore',
   integrations: [sitemap()],
   build: { format: 'directory' },
+  image: {
+    // Astro 4 native image optimization — auto WebP + AVIF
+    service: { entrypoint: 'astro/assets/services/sharp' },
+    remotePatterns: [{ protocol: 'https' }],
+  },
 });
