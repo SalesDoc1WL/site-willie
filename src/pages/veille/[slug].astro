@@ -23,6 +23,10 @@ const ART_THUMB = {
   'dematerialiser-courrier-collectivite': 'art-collectivite.jpg',
 };
 const cover = d.cover || `/img/home/${ART_THUMB[entry.slug] || 'numerisation.jpg'}`;
+// og:image doit être un raster (LinkedIn/Facebook/X ne rendent pas le SVG).
+// Si le cover est un SVG (ou absent), on retombe sur la vignette JPG de l'article.
+const ogRaster = `/img/home/${ART_THUMB[entry.slug] || 'numerisation.jpg'}`;
+const ogImg = d.cover && /\.(jpe?g|png|webp)$/i.test(d.cover) ? d.cover : ogRaster;
 
 const related = (await getCollection('veille', ({ data }) => !data.draft))
   .filter((a) => a.slug !== entry.slug && a.data.categorie === d.categorie)
@@ -48,7 +52,7 @@ const jsonld = [
   },
 ];
 ---
-<BaseLayout title={d.titre} description={d.description} type="article" jsonld={jsonld} readingBar>
+<BaseLayout title={d.titre} description={d.description} ogImage={ogImg} type="article" jsonld={jsonld} readingBar>
   <article>
     <section class="ihero">
       <div class="wrap ihero__in">
