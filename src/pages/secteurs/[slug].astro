@@ -4,7 +4,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import DiagnosticCTA from '../../components/DiagnosticCTA.astro';
 import RelatedList from '../../components/RelatedList.astro';
-import CasCard from '../../components/CasCard.astro';
 import { expertiseLabel } from '../../lib/labels.js';
 import { url } from '../../lib/url.js';
 
@@ -15,10 +14,6 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-
-const casList = (await getCollection('cas', ({ data }) => !data.draft))
-  .filter((c) => c.data.secteur === entry.slug)
-  .sort((a, b) => a.data.ordre - b.data.ordre);
 
 const expertiseLinks = entry.data.expertisesPertinentes.map((e) => ({ href: `/expertises/${e}`, label: expertiseLabel(e) }));
 
@@ -51,16 +46,6 @@ const jsonld = {
     <section class="lsec reveal">
       <div class="wrap">
         <RelatedList titre="Expertises pertinentes pour ce secteur" links={expertiseLinks} />
-      </div>
-    </section>
-  )}
-
-  {casList.length > 0 && (
-    <section class="lsec reveal">
-      <div class="wrap">
-        <span class="overline">Cas du secteur</span>
-        <h2 class="sec-title">Ce que j'ai réalisé dans ce secteur.</h2>
-        <div class="refs">{casList.map((c) => <CasCard cas={c} />)}</div>
       </div>
     </section>
   )}

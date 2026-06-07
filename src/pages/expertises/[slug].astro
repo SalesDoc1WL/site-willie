@@ -14,10 +14,6 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 
-const casList = (await getCollection('cas', ({ data }) => !data.draft))
-  .filter((c) => c.data.expertises.includes(entry.slug))
-  .sort((a, b) => a.data.ordre - b.data.ordre);
-
 const tags = EXPERTISE_TAGS[entry.slug] ?? [];
 const veille = (await getCollection('veille', ({ data }) => !data.draft))
   .filter((a) => a.data.tags.some((t) => tags.some((k) => t.toLowerCase().includes(k.toLowerCase()))))
@@ -70,24 +66,6 @@ const jsonld = [
       <article class="prose"><Content /></article>
     </div>
   </section>
-
-  {casList.length > 0 && (
-    <section class="related">
-      <div class="wrap">
-        <div class="eyebrow"><span class="no">→</span> Cette expertise en situation</div>
-        <div class="related__grid">
-          {casList.map((c) => (
-            <a class="rcard" href={url(`/cas/${c.slug}`)}>
-              <span class="k">{secteurLabel(c.data.secteur)}</span>
-              <b>{c.data.titre}</b>
-              <span class="d">{c.data.resume}</span>
-              <span class="more">Lire le cas <span class="arr">→</span></span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
 
   {(secteurLinks.length > 0 || veilleLinks.length > 0) && (
     <section class="lsec alt">

@@ -23,26 +23,9 @@ const fmtMois = (d) => d.toLocaleDateString('fr-FR', { year: 'numeric', month: '
 const fmtNum = (n) => n.toLocaleString('fr-FR');
 
 const figures = [
-  { to: 2000, suffix: '+', dur: 1500, lab: 'courriers traités par jour pour un établissement public financier' },
-  { to: 15, suffix: ' ans', dur: 1500, lab: 'de partenariat continu avec un assureur national' },
-  { to: 650, suffix: ' Go', dur: 1500, lab: 'conservés en archivage à valeur probante (SAE)' },
-];
-
-const stats = [
-  { to: 2000, suffix: '+', lab: 'courriers / jour — établissement public financier' },
-  { to: 15, suffix: ' ans', lab: 'de partenariat — assureur national' },
-  { to: 30000, suffix: '', lab: 'plis postaux / an — acteur du financement' },
-  { to: 6, suffix: '', lab: 'normes & certifications mobilisées' },
-];
-
-// Cas mis en avant (sélection curatée avec visuel + puces courtes)
-const cas = [
-  { sec: 'Banque', titre: 'Grand groupe bancaire', img: 'art-nf461.jpg', li: ['~1 400 AR recommandés/jour', 'Copie fidèle NF 544', 'SAE NF 461'] },
-  { sec: 'Secteur public', titre: 'Établissement public financier', img: 'art-collectivite.jpg', li: ['+2 000 courriers/jour', 'Recommandés, sensibles, PND, TSA', 'Traitement centralisé'] },
-  { sec: 'Assurance', titre: 'Assureur national', img: 'archives.jpg', li: ['Partenariat 15 ans', '~300 AR recommandés/jour', '650 Go en SAE'] },
-  { sec: 'Protection sociale', titre: 'Groupes paritaires & mutuelles', img: 'diagnostic.jpg', li: ['Plusieurs millions de plis/an', 'Réception, tri, indexation', 'Classification'] },
-  { sec: 'Courtage', titre: 'Courtier en assurances (Est)', img: 'art-ere.jpg', li: ['Dématérialisation du courrier entrant', '300 messages/jour', 'Back office libéré'] },
-  { sec: 'Collectivités', titre: 'Secteur public local', img: 'art-bpo.jpg', li: ['Copie fidèle NF 544', "Courrier entrant d'une régie des eaux", 'Archivage à valeur probante'] },
+  { to: 6, suffix: '', dur: 1500, lab: "expertises couvertes, du courrier entrant à l'archivage à valeur probante" },
+  { to: 4, suffix: '', dur: 1500, lab: 'normes clés maîtrisées : NF 544, NF 461, eIDAS, RGPD' },
+  { to: 100, suffix: ' %', dur: 1500, lab: 'des étapes tracées, horodatées et opposables' },
 ];
 
 const normes = ['NF 544', 'NF 461', 'NF K11-112', 'ISO 9001', 'ISO 27001', 'HDS', 'eIDAS', 'RGPD'];
@@ -76,7 +59,7 @@ const jsonld = {
     <span class="snav__item" data-go="#sortant"><span class="snav__lab">Éditique &amp; sortant</span><span class="snav__dot"></span></span>
     <span class="snav__item" data-go="#expertises"><span class="snav__lab">Expertises</span><span class="snav__dot"></span></span>
     <span class="snav__item" data-go="#secteurs"><span class="snav__lab">Secteurs</span><span class="snav__dot"></span></span>
-    <span class="snav__item" data-go="#resultats"><span class="snav__lab">Cas &amp; résultats</span><span class="snav__dot"></span></span>
+    <span class="snav__item" data-go="#resultats"><span class="snav__lab">Cadre de confiance</span><span class="snav__dot"></span></span>
     <span class="snav__item" data-go="#veille"><span class="snav__lab">Veille</span><span class="snav__dot"></span></span>
     <span class="snav__item" data-go="#apropos"><span class="snav__lab">À propos</span><span class="snav__dot"></span></span>
     <span class="snav__item" data-go="#contact"><span class="snav__lab">Contact</span><span class="snav__dot"></span></span>
@@ -350,32 +333,16 @@ const jsonld = {
     </div>
   </section>
 
-  <!-- ============ RÉSULTATS ============ -->
+  <!-- ============ CADRE DE CONFIANCE ============ -->
   <section class="res" id="resultats">
     <div class="wrap">
-      <div class="eyebrow"><span class="no">03</span> Des volumes critiques, déjà sous contrôle</div>
-      <h2>Cas de succès et résultats documentaires en production</h2>
-      <div class="res__stats">
-        {stats.map((s) => (
-          <div class="stat">
-            <div class="stat__n"><span class="count" data-to={s.to} data-dur="1500">{fmtNum(s.to)}</span>{s.suffix && <i>{s.suffix}</i>}</div>
-            <div class="stat__l">{s.lab}</div>
-          </div>
-        ))}
+      <div class="eyebrow"><span class="no">03</span> Un cadre normatif, pas des promesses</div>
+      <h2>Chaque étape s'appuie sur une norme opposable</h2>
+      <p style="max-width:60ch;margin-top:12px;">La valeur juridique de vos documents ne se décrète pas : elle repose sur des référentiels précis. Voici le cadre sur lequel je m'appuie pour sécuriser la numérisation, l'archivage, la signature et le recommandé électronique.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;">
+        {normes.map((n) => <span class="chip">{n}</span>)}
       </div>
-      <div class="res__cas">
-        {cas.map((r) => (
-          <div class="cas">
-            <div class="cas__media"><img src={url(`/img/home/${r.img}`)} alt={`${r.titre} — ${r.li[0]}`} loading="lazy" /></div>
-            <div class="cas__body">
-              <span class="cas__sec">{r.sec}</span>
-              <b class="cas__t">{r.titre}</b>
-              <ul class="cas__li">{r.li.map((x) => <li>{x}</li>)}</ul>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div class="sec-head-cta" style="margin-top:36px;"><a class="btn btn--secondary" href={url('/cas')}>Toute la bibliothèque de cas <span class="arr">→</span></a></div>
+      <div class="sec-head-cta" style="margin-top:36px;"><a class="btn btn--secondary" href={CALENDLY} target="_blank" rel="noopener">Réserver mon diagnostic <span class="arr">→</span></a></div>
     </div>
   </section>
 

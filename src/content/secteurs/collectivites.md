@@ -19,4 +19,4 @@ Les collectivités et services publics locaux conservent des dossiers sensibles 
 
 ## En pratique
 
-J'ai réalisé la copie fidèle NF 544 de dossiers sensibles et traité le courrier entrant d'une régie des eaux, avec archivage à valeur probante pour un service public. Voir la [bibliothèque de cas](/cas).
+Copie fidèle NF 544 de dossiers sensibles, courrier entrant dématérialisé et archivage à valeur probante, adaptés aux obligations de conservation du service public.

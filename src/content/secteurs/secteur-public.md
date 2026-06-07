@@ -19,4 +19,4 @@ Les organismes publics — établissements financiers publics, opérateurs, admi
 
 ## En pratique
 
-Un établissement public financier que j'accompagne traite plus de 2 000 courriers par jour (recommandés, sensibles, PND, TSA) en flux centralisé. Voir la [bibliothèque de cas](/cas).
+Courrier entrant centralisé — recommandés, plis sensibles, PND, TSA — numérisé, distribué aux services le jour même et archivé à valeur probante.

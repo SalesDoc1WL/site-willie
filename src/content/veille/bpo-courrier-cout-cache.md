@@ -32,7 +32,7 @@ Le tri manuel mobilise des collaborateurs sur des tâches sans valeur ajoutée, 
 
 L'[externalisation du courrier entrant](/expertises/bpo-courrier-entrant) supprime ces cinq postes d'un coup : tri, numérisation, indexation et distribution numérique le jour même, avec traçabilité native. Les services reçoivent leurs documents en quelques heures, classés et exploitables.
 
-Un établissement public que j'accompagne traite ainsi [plus de 2 000 courriers par jour en flux centralisé](/cas/etablissement-public-courrier-centralise).
+Sur un flux centralisé de plusieurs milliers de plis par jour, ces minutes gagnées à chaque étape se traduisent vite en plusieurs équivalents temps plein rendus aux équipes.
 
 Reste une question : à partir de quel volume l'externalisation devient-elle pertinente ? J'y réponds avec des repères concrets dans [Externaliser le traitement du courrier entrant : à partir de quel volume ?](/veille/externaliser-courrier-entrant-entreprise).
 

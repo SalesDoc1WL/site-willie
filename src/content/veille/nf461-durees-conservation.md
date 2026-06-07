@@ -33,6 +33,6 @@ Un bon SAE ne fait pas que conserver : il sait aussi **détruire** au bon moment
 
 ## En pratique
 
-J'accompagne un assureur national qui conserve [650 Go en SAE sur un partenariat de 15 ans](/cas/assureur-national-partenariat-15-ans). La clé n'est pas la capacité de stockage, mais la maîtrise du cycle de vie documentaire.
+Sur un archivage à valeur probante qui s'inscrit dans la durée, la clé n'est pas la capacité de stockage, mais la maîtrise du cycle de vie documentaire.
 
 Vous ne savez pas si vos archives actuelles tiendraient en cas de litige ? Un [diagnostic](/#contact) le détermine en 30 à 60 minutes.

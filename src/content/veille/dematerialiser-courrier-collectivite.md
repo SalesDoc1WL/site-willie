@@ -26,6 +26,6 @@ Les documents vivants partagés entre services trouvent leur place dans une [GED
 
 ## Le piège à éviter
 
-Vouloir tout faire d'un coup. La dématérialisation réussit quand elle est **progressive** : on commence par le flux le plus coûteux ou le plus risqué, on prouve la valeur, puis on étend. C'est l'approche que j'ai suivie pour le [courrier entrant d'une régie des eaux et la copie fidèle de dossiers sensibles](/cas/collectivite-regie-des-eaux-nf544).
+Vouloir tout faire d'un coup. La dématérialisation réussit quand elle est **progressive** : on commence par le flux le plus coûteux ou le plus risqué, on prouve la valeur, puis on étend. C'est l'approche à privilégier : commencer par exemple par le courrier entrant ou la copie fidèle des dossiers sensibles, prouver la valeur, puis élargir au reste.
 
 Vous portez un projet de dématérialisation dans votre collectivité ? [Réservons un échange](/#contact) pour en cadrer la première étape.

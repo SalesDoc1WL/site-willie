@@ -19,4 +19,4 @@ Les assureurs entretiennent des relations contractuelles longues, avec une forte
 
 ## En pratique
 
-J'accompagne un assureur national : environ 300 AR recommandés par jour et 650 Go conservés en SAE. Voir la [bibliothèque de cas](/cas).
+Recommandés électroniques, numérisation en copie fidèle et archivage à valeur probante longue durée, pensés pour suivre le cycle de vie des contrats sur toute leur durée légale.

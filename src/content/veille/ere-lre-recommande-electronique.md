@@ -25,6 +25,6 @@ Dans les deux cas, vous obtenez une **preuve de dépôt, de réception et de ref
 
 ## Les conditions de réussite
 
-Déployer le recommandé électronique à grande échelle suppose de l'**intégrer à vos applications** (émission en masse depuis le métier) et de penser dès le départ la **conservation des preuves**. C'est ce qui distingue un pilote anecdotique d'une industrialisation réelle — comme dans ce [cas bancaire de ~1 400 AR/jour](/cas/groupe-bancaire-ar-recommandes).
+Déployer le recommandé électronique à grande échelle suppose de l'**intégrer à vos applications** (émission en masse depuis le métier) et de penser dès le départ la **conservation des preuves**. C'est ce qui distingue un pilote anecdotique d'une industrialisation réelle, capable d'absorber des milliers d'envois par jour.
 
 Envie d'estimer le volume de recommandés que vous pourriez dématérialiser ? Parlons-en lors d'un [diagnostic](/#contact).

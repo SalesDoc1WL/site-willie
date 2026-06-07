@@ -41,6 +41,6 @@ Utiliser une GED comme archive, c'est risquer l'inopposabilité. Utiliser un SAE
 
 ## En pratique
 
-Dans le secteur public local, je combine souvent GED pour les dossiers de service et [copie fidèle NF 544 + SAE pour les pièces sensibles](/cas/collectivite-regie-des-eaux-nf544).
+Dans le secteur public local, on combine souvent une GED pour les dossiers de service et la copie fidèle NF 544 + un SAE pour les pièces sensibles.
 
 Vous hésitez sur l'architecture à mettre en place ? Parlons-en lors d'un [diagnostic](/#contact).

@@ -19,4 +19,4 @@ Les groupes bancaires gèrent des volumes documentaires considérables et fortem
 
 ## En pratique
 
-Un grand groupe bancaire que j'ai accompagné traite environ 1 400 AR recommandés par jour, avec copie fidèle NF 544 et archivage NF 461. Voir la [bibliothèque de cas](/cas).
+Recommandés industrialisés, copie fidèle NF 544 et archivage NF 461 réunis dans un flux unique, tracé et opposable, dimensionné pour de très gros volumes d'AR quotidiens.

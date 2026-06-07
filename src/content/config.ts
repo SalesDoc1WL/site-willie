@@ -50,20 +50,6 @@ const secteurs = defineCollection({
   }),
 });
 
-const cas = defineCollection({
-  type: 'content',
-  schema: z.object({
-    titre: z.string(),
-    client: z.string(), // anonymisé
-    secteur: z.enum(SECTEUR_SLUGS),
-    expertises: z.array(z.enum(EXPERTISE_SLUGS)).default([]),
-    chiffres: z.array(z.object({ valeur: z.string(), label: z.string() })).default([]),
-    resume: z.string(),
-    ordre: z.number().default(99),
-    draft: z.boolean().default(false),
-  }),
-});
-
 const veille = defineCollection({
   type: 'content',
   schema: z.object({
@@ -78,4 +64,4 @@ const veille = defineCollection({
   }),
 });
 
-export const collections = { expertises, secteurs, cas, veille };
+export const collections = { expertises, secteurs, veille };

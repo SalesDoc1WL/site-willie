@@ -19,4 +19,4 @@ Les cabinets de courtage traitent un flux quotidien dense de documents — contr
 
 ## En pratique
 
-J'ai accompagné un courtier en assurances de l'Est sur la dématérialisation de son courrier entrant : environ 300 messages par jour, back office libéré. Voir la [bibliothèque de cas](/cas).
+Courrier entrant dématérialisé — tri, numérisation, indexation — et dossiers centralisés en GED, pour décharger le back office du traitement manuel et le recentrer sur le conseil.
