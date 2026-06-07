@@ -1,0 +1,34 @@
+{
+  "publications": [
+    {
+      "id": "brouillon-1",
+      "titre": "Signature électronique : les 3 pièges du RGS",
+      "description": "Les entreprises croient maîtriser la signature électronique avec RGS. Trois erreurs systématiques.",
+      "categorie": "Confiance numérique",
+      "status": "brouillon",
+      "pubDate": null,
+      "dateCreation": "2026-05-15",
+      "tags": ["signature", "RGS", "eIDAS"]
+    },
+    {
+      "id": "planifiee-1",
+      "titre": "Archivage 2027 : préparation légale",
+      "description": "Les changements réglementaires à venir. Comment préparer sa stratégie d'archivage dès maintenant.",
+      "categorie": "Archivage & Conformité",
+      "status": "planifiée",
+      "pubDate": "2026-07-20",
+      "dateCreation": "2026-06-01",
+      "tags": ["archivage", "2027", "compliance"]
+    },
+    {
+      "id": "planifiee-2",
+      "titre": "Facturation électronique : guide secteur public",
+      "description": "Comment se préparer à l'obligation eFacture. Calendrier et étapes clés pour les collectivités.",
+      "categorie": "Secteur public",
+      "status": "planifiée",
+      "pubDate": "2026-08-15",
+      "dateCreation": "2026-06-02",
+      "tags": ["facturation", "secteur public", "eFacture"]
+    }
+  ]
+}

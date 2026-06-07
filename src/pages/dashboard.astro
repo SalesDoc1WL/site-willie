@@ -1,0 +1,205 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import { url } from '../lib/url.js';
+import pubsData from '../data/publications.json';
+
+const allVeille = await getCollection('veille');
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const published = allVeille
+  .filter(a => !a.data.draft && a.data.pubDate <= today)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .map(a => ({
+    id: a.slug,
+    titre: a.data.titre,
+    description: a.data.description,
+    categorie: a.data.categorie,
+    status: 'publiée',
+    pubDate: a.data.pubDate.toISOString().split('T')[0],
+    slug: a.slug,
+    source: 'content'
+  }));
+
+const scheduled_future = allVeille
+  .filter(a => !a.data.draft && a.data.pubDate > today)
+  .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf())
+  .map(a => ({
+    id: a.slug,
+    titre: a.data.titre,
+    description: a.data.description,
+    categorie: a.data.categorie,
+    status: 'planifiée',
+    pubDate: a.data.pubDate.toISOString().split('T')[0],
+    slug: a.slug,
+    source: 'content'
+  }));
+
+const drafts = pubsData.publications.filter(p => p.status === 'brouillon');
+const scheduled = [
+  ...scheduled_future,
+  ...pubsData.publications.filter(p => p.status === 'planifiée')
+].sort((a, b) => new Date(a.pubDate).valueOf() - new Date(b.pubDate).valueOf());
+
+const fmtDate = (dateStr) => {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+
+const stats = {
+  publiées: published.length,
+  brouillons: drafts.length,
+  planifiées: scheduled.length
+};
+
+const hasDrafts = drafts.length > 0;
+const hasScheduled = scheduled.length > 0;
+---
+
+<BaseLayout title="Dashboard — Gestion des publications" description="Tableau de bord de gestion des publications : publiées, en cours, à venir.">
+  <Breadcrumb items={[{ label: 'Dashboard' }]} />
+  <header class="page-head">
+    <div class="wrap">
+      <span class="overline">Gestion</span>
+      <h1>Tableau de bord publications</h1>
+      <p>Suivi centralisé : publiées, brouillons, articles planifiés à venir.</p>
+    </div>
+  </header>
+
+  <section class="lsec reveal">
+    <div class="wrap">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:40px;">
+        <div style="padding:20px;background:#f5f5f5;border-radius:8px;border-left:4px solid #00a650;">
+          <div style="font-size:32px;font-weight:bold;color:#00a650;">{stats.publiées}</div>
+          <div style="color:#666;margin-top:4px;">Publiées</div>
+        </div>
+        <div style="padding:20px;background:#f5f5f5;border-radius:8px;border-left:4px solid #ff9800;">
+          <div style="font-size:32px;font-weight:bold;color:#ff9800;">{stats.brouillons}</div>
+          <div style="color:#666;margin-top:4px;">Brouillons</div>
+        </div>
+        <div style="padding:20px;background:#f5f5f5;border-radius:8px;border-left:4px solid #2196f3;">
+          <div style="font-size:32px;font-weight:bold;color:#2196f3;">{stats.planifiées}</div>
+          <div style="color:#666;margin-top:4px;">Planifiées</div>
+        </div>
+      </div>
+
+      <!-- PUBLIÉES -->
+      <h2 style="margin-top:40px;margin-bottom:20px;">✓ Publiées ({published.length})</h2>
+      <div style="overflow-x:auto;margin-bottom:40px;">
+        <table style="width:100%;border-collapse:collapse;font-size:14px;">
+          <thead style="background:#f9f9f9;border-bottom:2px solid #ddd;">
+            <tr>
+              <th style="padding:12px;text-align:left;font-weight:600;">Titre</th>
+              <th style="padding:12px;text-align:left;font-weight:600;">Catégorie</th>
+              <th style="padding:12px;text-align:left;font-weight:600;">Date</th>
+              <th style="padding:12px;text-align:center;font-weight:600;">Lien</th>
+            </tr>
+          </thead>
+          <tbody>
+            {published.map(p => (
+              <tr style="border-bottom:1px solid #eee;">
+                <td style="padding:12px;">
+                  <strong>{p.titre}</strong>
+                  <div style="color:#666;font-size:12px;margin-top:4px;">{p.description}</div>
+                </td>
+                <td style="padding:12px;"><span style="background:#e8f5e9;padding:4px 8px;border-radius:4px;font-size:12px;">{p.categorie}</span></td>
+                <td style="padding:12px;color:#666;">{fmtDate(p.pubDate)}</td>
+                <td style="padding:12px;text-align:center;">
+                  <a href={url(`/veille/${p.slug}`)} style="color:#0066cc;text-decoration:none;">→</a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- BROUILLONS -->
+      <h2 style="margin-top:40px;margin-bottom:20px;">✎ Brouillons ({drafts.length})</h2>
+      {hasDrafts ? (
+        <div style="overflow-x:auto;margin-bottom:40px;">
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead style="background:#fffde7;border-bottom:2px solid #ffb300;">
+              <tr>
+                <th style="padding:12px;text-align:left;font-weight:600;">Titre</th>
+                <th style="padding:12px;text-align:left;font-weight:600;">Catégorie</th>
+                <th style="padding:12px;text-align:left;font-weight:600;">Créé</th>
+              </tr>
+            </thead>
+            <tbody>
+              {drafts.map(d => (
+                <tr style="border-bottom:1px solid #ffe082;">
+                  <td style="padding:12px;">
+                    <strong>{d.titre}</strong>
+                    <div style="color:#666;font-size:12px;margin-top:4px;">{d.description}</div>
+                  </td>
+                  <td style="padding:12px;"><span style="background:#fff3e0;padding:4px 8px;border-radius:4px;font-size:12px;">{d.categorie}</span></td>
+                  <td style="padding:12px;color:#666;">{fmtDate(d.dateCreation)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p style="color:#999;font-style:italic;margin-bottom:40px;">Aucun brouillon en cours.</p>
+      )}
+
+      <!-- PLANIFIÉES -->
+      <h2 style="margin-top:40px;margin-bottom:20px;">→ Planifiées ({scheduled.length})</h2>
+      {hasScheduled ? (
+        <div style="overflow-x:auto;margin-bottom:40px;">
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead style="background:#e3f2fd;border-bottom:2px solid #2196f3;">
+              <tr>
+                <th style="padding:12px;text-align:left;font-weight:600;">Titre</th>
+                <th style="padding:12px;text-align:left;font-weight:600;">Catégorie</th>
+                <th style="padding:12px;text-align:left;font-weight:600;">Pub. prévue</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scheduled.map(s => (
+                <tr style="border-bottom:1px solid #bbdefb;">
+                  <td style="padding:12px;">
+                    <strong>{s.titre}</strong>
+                    <div style="color:#666;font-size:12px;margin-top:4px;">{s.description}</div>
+                  </td>
+                  <td style="padding:12px;"><span style="background:#e1f5fe;padding:4px 8px;border-radius:4px;font-size:12px;">{s.categorie}</span></td>
+                  <td style="padding:12px;color:#666;">{fmtDate(s.pubDate)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p style="color:#999;font-style:italic;margin-bottom:40px;">Aucun article planifié.</p>
+      )}
+
+      <!-- INSTRUCTIONS -->
+      <div style="margin-top:50px;padding:20px;background:#f0f7ff;border-left:4px solid #0066cc;border-radius:4px;">
+        <p><strong>Gestion du JSON :</strong></p>
+        <ul style="margin:0;padding-left:20px;">
+          <li>Éditer <code>src/data/publications.json</code> pour ajouter/modifier brouillons et articles planifiés</li>
+          <li><code>status</code> : <code>"brouillon"</code>, <code>"planifiée"</code></li>
+          <li><code>pubDate</code> : date de publication (format <code>YYYY-MM-DD</code>, <code>null</code> pour brouillons)</li>
+          <li>Pour publier un article : créer fichier MD dans <code>src/content/veille/</code></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  code {
+    background: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 13px;
+  }
+
+  ul {
+    line-height: 1.8;
+  }
+</style>
